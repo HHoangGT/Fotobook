@@ -68,3 +68,12 @@
 	font-family: "Roboto", sans-serif;
 	color: #828282;
 }
+
+.register-button {
+	background-color: #3b5998;
+	color: white;
+	&:hover { 
+        color: rgb(229, 246, 255);
+        background: #0089d1;
+    }
+}
