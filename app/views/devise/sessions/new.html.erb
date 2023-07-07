@@ -10,18 +10,21 @@
     class="form-signin w-75 m-auto bg-body-tertiary text-center border border-ligh mb-3 mt-1"
   >
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+      <img class="mb-4" , alt="User login image" , width="72" , height="57" , src="<%= image_path("user-solid.svg") %>">
+
       <div class="form-floating">
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "name@example.com" %>
         <%= f.label :email %>
       </div>
 
       <div class="form-floating">
-        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control", placeholder: "Password" %>
         <%= f.label :password %><br/>
       </div>
 
       <% if devise_mapping.rememberable? %>
-        <div class="field form-check text-start my-3">
+        <div class="field form-check text-start mb-3">
           <%= f.check_box :remember_me, class: "form-check-input" %>
           <%= f.label :remember_me, class: "form-check-label" %>
         </div>
@@ -32,11 +35,13 @@
       </div>
 
       <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-        <%= link_to "Forgot password?", new_password_path(resource_name), class: "login-link-to text-decoration-none" %><br />
+        <%= link_to "Forgot password?", new_password_path(resource_name), class: "login-link-to text-decoration-none" %>
+        <br/>
       <% end %>
     <% end %>
   </main>
   <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-    <%= link_to "Create an account", new_registration_path(resource_name), class: "login-link-to text-decoration-none" %><br />
+    <%= link_to "Create an account", new_registration_path(resource_name), class: "login-link-to text-decoration-none" %>
+    <br/>
   <% end %>
 </div>
