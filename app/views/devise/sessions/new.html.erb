@@ -1,26 +1,42 @@
-<h2>Log in</h2>
+<div class="d-flex align-items-center h-75 flex-column">
+  <h2
+    class="h3 mb-3 mt-5 display-6 fw-normal"
+    style="font-family: 'Lexend', sans-serif; color: #3b5998"
+  >
+    Fotobook Login
+  </h2>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+  <main
+    class="form-signin w-75 m-auto bg-body-tertiary text-center border border-ligh mb-3 mt-1"
+  >
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="form-floating">
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+        <%= f.label :email %>
+      </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
+      <div class="form-floating">
+        <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
+        <%= f.label :password %><br/>
+      </div>
 
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
-    </div>
+      <% if devise_mapping.rememberable? %>
+        <div class="field form-check text-start my-3">
+          <%= f.check_box :remember_me, class: "form-check-input" %>
+          <%= f.label :remember_me, class: "form-check-label" %>
+        </div>
+      <% end %>
+
+      <div class="actions">
+        <%= f.submit "Log in", class: "btn w-50 py-2 mb-3 register-button" %>
+      </div>
+
+      <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+        <%= link_to "Forgot password?", new_password_path(resource_name), class: "login-link-to text-decoration-none" %><br />
+      <% end %>
+    <% end %>
+  </main>
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <%= link_to "Create an account", new_registration_path(resource_name), class: "login-link-to text-decoration-none" %><br />
   <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
