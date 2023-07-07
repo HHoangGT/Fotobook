@@ -54,7 +54,7 @@
           <% if current_user %>
             <li class="nav-item ps-3 d-inline-flex align-items-center ms-md-auto">
               <div class="me-2 mb-0 text-center avatar-header">
-                <p class="mb-0"> <%= current_user.fname %> </p>
+                <p class="mb-0"> <%= current_user.fname[0] + current_user.lname[0] %> </p>
               </div>
               <p class="text-light me-4 mb-0"><%= current_user.fname + " " + current_user.lname %></p>
               <%= link_to "Logout", destroy_user_session_path, class: "nav-link link-light active" %>
