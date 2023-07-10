@@ -1,21 +1,25 @@
 <% if flash[:notice] %>
   <%= render "layouts/partials/alerts" %>
-  <div class="alert alert-success d-flex align-items-center justify-content-center position-absolute bottom-0 end-0" role="alert">
-    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
-      <use xlink:href="#check-circle-fill"/>
-    </svg>
-    <%= flash[:notice] %>
+  <div class="alert alert-success d-flex align-items-center justify-content-between position-absolute bottom-0 end-0 w-25" role="alert">
+    <div class="d-flex gap-1">
+      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+        <use xlink:href="#check-circle-fill"/>
+      </svg>
+      <h6><%= flash[:notice] %></h6>
+    </div>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 <% end %>
 
 <% if flash[:alert] %>
   <%= render "layouts/partials/alerts" %>
-  <div class="alert alert-warning d-flex align-items-center justify-content-center position-absolute bottom-0 end-0" role="alert">
-    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
-      <use xlink:href="#exclamation-triangle-fill"/>
-    </svg>
-    <%= flash[:alert] %>
+  <div class="alert alert-warning d-flex align-items-center justify-content-between position-absolute bottom-0 end-0 w-25" role="alert">
+    <div class="d-flex gap-1">
+      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
+        <use xlink:href="#exclamation-triangle-fill"/>
+      </svg>
+      <h6><%= flash[:alert] %></h6>
+    </div>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 <% end %>
