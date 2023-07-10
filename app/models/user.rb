@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  mount_uploader :avatar, AvatarUploader
 
   validates :fname, presence: true, length: { maximum: 25 }
   validates :lname, presence: true, length: { maximum: 25 }

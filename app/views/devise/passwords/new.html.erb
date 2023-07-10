@@ -1,16 +1,41 @@
-<h2>Forgot your password?</h2>
+<div class="d-flex align-items-center h-75 flex-column">
+  <h2 class="h3 mb-3 mt-5 display-6 fw-normal"
+      style="font-family: 'Lexend', sans-serif; color: #3b5998">
+    Forgot your password?
+  </h2>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <main
+    class="form-signin w-75 m-auto bg-body-tertiary text-center border border-ligh mb-3 mt-1"
+  >
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-  </div>
+      <div class="field mb-3">
+        <%= f.label :email, class: "form-label float-start register-label" %><br/>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder: "Your email" %>
+      </div>
 
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
+      <div class="actions">
+        <%= f.submit "Send me reset password instructions", class: "btn w-100 py-2 register-button" %>
+      </div>
+    <% end %>
+
+    <%#= render "devise/shared/links", class: "login-link-to text-decoration-none" %>
+  </main>
+  <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+    <%= link_to "Create an account", new_registration_path(resource_name), class: "login-link-to text-decoration-none" %>
+    <br/>
+  <% end %>
+</div>
+
+<% if resource.errors.any? %>
+  <%= render "layouts/partials/alerts" %>
+  <div class="alert alert-warning d-flex flex-column align-items-center position-absolute bottom-0 end-0" role="alert">
+    <div class="d-flex justify-content-between w-100 mb-3">
+      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+        <use xlink:href="#exclamation-triangle-fill"/>
+      </svg>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <%= render "devise/shared/error_messages", resource: resource %>
   </div>
 <% end %>
-
-<%= render "devise/shared/links" %>
