@@ -1,43 +1,133 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
-
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+<nav class="navbar bg-white border-bottom border-secondary-subtle">
+  <div class="container">
+    <h2 class="navbar-brand" style="font-family: 'Roboto', sans-serif; font-weight: 700">
+      Edit <%= resource_name.to_s.humanize %> Profile
+    </h2>
   </div>
+</nav>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+<div class="d-flex flex-column align-items-center justify-content-center container-fluid">
+
+  <!--  Edit Info form-->
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+
+    <div class="row g-3 w-100 mt-1">
+      <div class="col-0 col-md-3"></div>
+      <div class="col-12 col-md-9">
+        <div class="position-relative" style="width: 200px; height: 200px">
+          <% if current_user.avatar.file.nil? %>
+            <%= image_tag("user-solid.svg", class: "img-thumbnail border-0 p-0", style: "width: 200px; height: 200px") %>
+          <% else %>
+            <%= image_tag(current_user.avatar.url,
+                          class: "img-thumbnail border-0 p-0", style: "width: 200px; height: 200px") %>
+          <% end %>
+          <%= f.label :avatar, "CHANGE", class: "position-absolute btn btn-light w-50 opacity-50", style: "bottom: 10px; right: 50px" %>
+          <%= f.file_field :avatar, class: "d-none" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-3 w-75 mt-1">
+      <div class="col-4 col-md-2 px-0"></div>
+      <div class="col-8 col-md-10">
+        <h5 class="font-family: 'Roboto', sans-serif; font-weight: 700" style="color: #3b5998">
+          Basic Information
+        </h5>
+      </div>
+    </div>
+
+    <div class="field row g-3 w-75 mt-1">
+      <%= f.label :email, class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+      <br/>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "col-8 col-md-10 mt-0 form-control w-75" %>
+    </div>
+
+    <div class="field row g-3 w-75 mt-1">
+      <%= f.label :fname, "First Name", class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+      <br/>
+      <%= f.text_field :fname, class: "col-8 col-md-10 mt-0 form-control w-75" %>
+    </div>
+
+    <div class="field row g-3 w-75 mt-1">
+      <%= f.label :lname, "Last Name", class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+      <br/>
+      <%= f.text_field :lname, class: "col-8 col-md-10 mt-0 form-control w-75" %>
+    </div>
+
+
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <% end %>
+
+    <div class="field row g-3 w-75 mt-1">
+      <%= f.label :current_password, class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+      <br/>
+      <%= f.password_field :current_password, autocomplete: "current-password", class: "col-8 col-md-10 mt-0 form-control w-75" %>
+      <br/><i>(we need your current password to confirm your changes)</i>
+    </div>
+
+    <div class="actions row g-3 w-75 mt-1">
+      <div class="col-4 col-md-2 px-0"></div>
+      <div class="col-8 col-md-10">
+        <%= f.submit "Save", class: " btn btn-success" %>
+      </div>
+    </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "new-password" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
+  <!-- Edit Password form-->
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+
+    <div class="row g-3 w-75 mt-5">
+      <div class="col-4 col-md-2 px-0"></div>
+      <div class="col-8 col-md-10">
+        <h5 class="font-family: 'Roboto', sans-serif; font-weight: 700" style="color: #3b5998">
+          Password
+        </h5>
+      </div>
+    </div>
+
+    <div class="field row g-3 w-75 mt-1">
+      <!--      <i class="mt-0">(leave blank if you don't want to change it)</i><br/>-->
+      <%# if @minimum_password_length %>
+      <!--        <br/>-->
+      <!--        <em class="mt-0"><%#= @minimum_password_length %> characters minimum</em>-->
+      <%# end %>
+      <%= f.label :password, class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+      <br/>
+      <%= f.password_field :password, autocomplete: "new-password", class: "col-8 col-md-10 mt-0 form-control w-75" %>
+    </div>
+
+    <div class="field row g-3 w-75 mt-1">
+      <%= f.label :password_confirmation, class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+      <br/>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "col-8 col-md-10 mt-0 form-control w-75" %>
+    </div>
+
+    <div class="field row g-3 w-75 mt-1">
+      <%= f.label :current_password, class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+      <br/>
+      <%= f.password_field :current_password, autocomplete: "current-password", class: "col-8 col-md-10 mt-0 form-control w-75" %>
+      <br/><i>(we need your current password to confirm your changes)</i>
+    </div>
+
+    <div class="actions row g-3 w-75 mt-1">
+      <div class="col-4 col-md-2 px-0"></div>
+      <div class="col-8 col-md-10">
+        <%= f.submit "Save", class: " btn btn-success" %>
+      </div>
+    </div>
+  <% end %>
+
+  <!--  Delete account-->
+  <div class="d-flex flex-column align-items-center justify-content-center container-fluid mt-5">
+    <h3 class="font-family: 'Roboto', sans-serif; font-weight: 700; mb-0" style="color: #3b5998">Cancel my
+      account</h3>
+
+    <div class="font-family: 'Roboto', sans-serif; font-weight: 700; text-center mt-0" style="color: #3b5998">Unhappy?
+      <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: " btn btn-danger mt-3" %>
+    </div>
+    <%#= link_to "Back", :back %>
   </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
-<% end %>
-
-<h3>Cancel my account</h3>
-
-<div>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete %></div>
-
-<%= link_to "Back", :back %>
+</div>
+<%= render "layouts/partials/errormessgaes" %>

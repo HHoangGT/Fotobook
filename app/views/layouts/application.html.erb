@@ -14,7 +14,11 @@
 <%= render "layouts/partials/navbar" %>
 
 <div class="container-fluid">
-  <%= yield %>
+  <% if current_user %>
+    <%= render "layouts/partials/logined" %>
+  <% else %>
+    <%= yield %>
+  <% end %>
 </div>
 
 <%= render "layouts/partials/displayAlerts" %>

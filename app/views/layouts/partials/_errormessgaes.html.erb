@@ -1,0 +1,12 @@
+<% if resource.errors.any? %>
+  <%= render "layouts/partials/alerts" %>
+  <div class="alert alert-warning d-flex flex-column align-items-center position-absolute bottom-0 end-0" role="alert">
+    <div class="d-flex justify-content-between w-100 mb-3">
+      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+        <use xlink:href="#exclamation-triangle-fill"/>
+      </svg>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <%= render "devise/shared/error_messages", resource: resource %>
+  </div>
+<% end %>
