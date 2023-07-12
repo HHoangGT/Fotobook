@@ -19,7 +19,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # PUT /resource
+  # # # PUT /resource
   # def update
   #   super
   # end
@@ -30,7 +30,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # def update_resource(resource, params)
-  #   puts params
   #   return super if params[:password].present?
   #
   #   resource.update_without_password(params.except(:password))
