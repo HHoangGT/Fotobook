@@ -63,7 +63,9 @@
                   <% end %>
                 </p>
               </div>
-              <p class="text-light me-4 mb-0"><%= current_user.fname + " " + current_user.lname %></p>
+              <p class="text-light me-4 mb-0">
+                <%= link_to current_user.fname + " " + current_user.lname, profiles_photos_path,
+                            class: "text-decoration-none", style: "color: inherit" %></p>
               <%= link_to "Logout", destroy_user_session_path, class: "nav-link link-light active" %>
             </li>
           <% else %>

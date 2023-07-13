@@ -1,0 +1,64 @@
+<div class="row">
+  <!--  user image-->
+  <div class="col-12 col-md-3">
+    <% if user.avatar.file.nil? %>
+      <%= image_tag("user-solid.svg", class: "rounded-circle img-fluid w-100 h-100") %>
+    <% else %>
+      <%= image_tag(user.avatar.url, class: "rounded-circle img-fluid w-100 h-100") %>
+    <% end %>
+  </div>
+  <!--  user overall info-->
+  <div class="col-12 col-md-9 p-4 border-bottom border-secondary">
+    <div class="d-flex flex-column align-items-start justify-content-center">
+      <!--      Edit profile link-->
+      <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-info fbtn mb-3",
+                  style: " color: #3b5998;border-color: #3b5998;--bs-btn-padding-y: 0.25rem;--bs-btn-padding-x: 0.5rem;
+                  --bs-btn-font-size: 0.75rem" %>
+      <!--      User name-->
+      <h2 style="font-family: 'Roboto', sans-serif; font-weight: 700"> <%= user.fname + " " + user.lname %> </h2>
+      <!--      redirect to other pages link-->
+      <div class="d-flex align-items-center justify-content-start">
+        <!--        photos-->
+        <p
+          class="fbtn border-end border-secondary pe-2"
+          style="font-size: 20px; color: #3b5998"
+        >
+          <%= user.photos.count %>
+          <span style="font-size: 15px">
+            <%= link_to "PHOTOS", profiles_photos_path, class: "text-decoration-none", style: "color: inherit;" %>
+          </span>
+        </p>
+        <!--        Albums-->
+        <p
+          class="fbtn ms-2 border-end border-secondary pe-2"
+          style="font-size: 20px"
+        >
+          43 <span style="font-size: 15px">ALBUMS</span>
+        </p>
+        <!--        Followings-->
+        <p
+          class="fbtn ms-2 border-end border-secondary pe-2"
+          style="font-size: 20px"
+        >
+          22 <span style="font-size: 15px">FOLLOWINGS</span>
+        </p>
+        <!--        Followers-->
+        <p class="fbtn ms-2" style="font-size: 20px">
+          13 <span style="font-size: 15px">FOLLOWERS</span>
+        </p>
+      </div>
+      <!--      add photo-->
+      <div class="d-flex w-100 justify-content-end">
+        <%= link_to "Add Photo", new_photo_path, class: "btn btn-success",
+                    style: "font-size: 15px; font-family: 'Roboto', sans-serif; font-weight: 700;
+											--bs-btn-padding-y: 0.25rem;
+											--bs-btn-padding-x: 0.5rem;
+											--bs-btn-font-size: 0.75rem;" %>
+      </div>
+    </div>
+  </div>
+  <!--  render user all photos-->
+  <% user.photos.each do |photo| %>
+    <%= render partial: "profiles/partials/photos", locals: { photo: photo } %>
+  <% end %>
+</div>

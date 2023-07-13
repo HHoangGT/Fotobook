@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     resources :photos, except: %i[index show]
   end
 
+  get '/profiles/photos', to: 'profiles#personalpagephoto'
+
   root 'main#home'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
