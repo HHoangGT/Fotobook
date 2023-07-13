@@ -1,0 +1,82 @@
+<nav class="navbar bg-white border-bottom border-secondary-subtle mb-3">
+  <div class="container">
+    <h2 class="navbar-brand" style="font-family: 'Roboto', sans-serif; font-weight: 700">
+      Edit Photo
+    </h2>
+  </div>
+</nav>
+
+<div class="container">
+  <%= form_with model: @photo, url: photo_path, method: :patch do |f| %>
+    <div class="row align-items-center">
+      <div class="col col-12 col-md-6">
+        <div class="mb-3">
+          <%= f.label :title, "Title", class: "form-label",
+                      style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+          <%= f.text_field :title, class: "form-control", placeholder: "Photo title" %>
+        </div>
+
+        <%= f.label :mode, "Sharing mode", class: "form-label",
+                    style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+        <%= f.select :mode, ["Public", "Private"], {}, class: "form-select" %>
+      </div>
+
+      <div class="col col-12 col-md-6">
+        <div class="mb-3">
+          <%= f.label :description, "Description", class: "form-label",
+                      style: "font-family: 'Roboto', sans-serif;font-weight: 700;font-size: 13px;" %>
+          <%= f.text_area :description, class: "form-control", rows: "6", placeholder: "Photo description" %>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="d-grid gap-4">
+      <div class="rounded border-dark border-2 bg-light d-flex align-items-center justify-content-center position-relative"
+           style="width: 200px; height: 200px; border-style: dashed"
+           onclick="document.getElementById('photo_image').click()">
+        <% if @photo.image.file.nil? %>
+          <%= image_tag("upload.svg", style: "width: 50px; height: 50px", id: "blah_1") %>
+        <% else %>
+          <%= image_tag("upload.svg", class: "d-none", style: "width: 50px; height: 50px", id: "blah_1") %>
+          <%= image_tag(@photo.image.url, class: "d-block", style: "width: 200px; height: 200px", id: "blah_2") %>
+          <div style="width: 30px; height: 30px"
+               onclick="changeImage()">
+            <%= image_tag("cancel.png", class: "d-block", id: "blah_3",
+                          style: "position: absolute; top: 0; right: 0; width: 20px; height: 20px") %>
+          </div>
+        <% end %>
+      </div>
+      <%= f.label :image, class: "d-none" %>
+      <%= f.file_field :image, class: "d-none" %>
+      <div class="d-flex gap-3">
+        <%= f.submit "Save", name: "save", class: "btn btn-success", style: "width: 100px" %>
+        <%= f.submit "Delete", name: "delete", class: "btn btn-danger", style: "width: 100px" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<script>
+    photo_image.onchange = evt => {
+        const [file] = photo_image.files
+        if (file) {
+            blah_2.src = URL.createObjectURL(file)
+            document.getElementById("blah_1").classList.add('d-none')
+            document.getElementById(("blah_1")).classList.remove('d-block')
+            document.getElementById(("blah_2")).classList.add(('d-block'))
+            document.getElementById(("blah_2")).classList.remove('d-none')
+            document.getElementById(("blah_3")).classList.add(('d-block'))
+            document.getElementById(("blah_3")).classList.remove('d-none')
+        }
+    }
+
+    function changeImage() {
+        document.getElementById("blah_1").classList.remove('d-none')
+        document.getElementById(("blah_1")).classList.add('d-block')
+        document.getElementById(("blah_2")).classList.remove(('d-block'))
+        document.getElementById(("blah_2")).classList.add('d-none')
+        document.getElementById(("blah_3")).classList.remove(('d-block'))
+        document.getElementById(("blah_3")).classList.add('d-none')
+    }
+</script>
