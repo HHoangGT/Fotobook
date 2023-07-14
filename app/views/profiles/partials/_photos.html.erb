@@ -1,6 +1,8 @@
 <div class="col-12 col-md-3 my-3 d-flex flex-column align-items-center">
   <div class="position-relative" style="width: 200px; height: 200px">
-    <%= image_tag(photo.image.url, class: "img-fluid rounded", style: "width: 200px; height: 200px") %>
+    <div data-bs-toggle="modal" data-bs-target="#<%= photo.id %>">
+      <%= image_tag(photo.image.url, class: "img-fluid rounded", style: "width: 200px; height: 200px") %>
+    </div>
     <%= link_to "Edit", edit_photo_path(photo.id),
                 class: "btn position-absolute fbtn text-decoration-none opacity-50 bg-light text-center p-0",
                 style: "bottom: 3px; right: 3px; height: 25px; width: 50px; font-size: 16px" %>
@@ -12,4 +14,21 @@
     <%= image_tag(@lock_path, class: "position-absolute", style: "top: 3px; right: 3px; height: 30px; width: 30px") %>
   </div>
   <p class="fbtn text-center"><%= photo.title %></p>
+</div>
+
+<div class="modal fade" id="<%= photo.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fbtn text-dark" style="font-size: 20px" id="exampleModalLabel"><%= photo.title %></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body justify-content-center">
+        <%= image_tag(photo.image.url, class: "img-fluid rounded w-100 h-100") %>
+      </div>
+      <div class="modal-footer justify-content-start">
+        <p class="fbtn text-dark" style="font-weight: 400; font-size: 14px"><%= photo.description %></p>
+      </div>
+    </div>
+  </div>
 </div>
