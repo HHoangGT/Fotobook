@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   devise_scope :user do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
-  # Photo routes
+  # Photo and albums routes
   scope :users do
-    resources :photos, except: %i[index show]
+    resources :photos, :albums, except: %i[index show]
   end
   # Profile routes
   get '/profiles/photos', to: 'profiles#personalpagephoto'
