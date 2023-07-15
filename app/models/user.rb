@@ -6,6 +6,7 @@ class User < ApplicationRecord
   mount_uploader :avatar, AvatarUploader
 
   has_many :photos, dependent: :destroy
+  has_many :albums, dependent: :destroy
 
   validates :fname, presence: true, length: { maximum: 25 }
   validates :lname, presence: true, length: { maximum: 25 }

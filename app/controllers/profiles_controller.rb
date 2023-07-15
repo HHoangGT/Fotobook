@@ -5,6 +5,10 @@ class ProfilesController < ApplicationController
     @user = current_user
   end
 
+  def personalpagealbum
+    @user = current_user
+  end
+
   private
 
   def required_login

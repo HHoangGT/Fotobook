@@ -1,0 +1,21 @@
+<div class="col-12 col-md-3 my-5 d-flex flex-column align-items-center position-relative" style="height: 280px">
+  <%= image_tag(album.images[0].url, class: "img-fluid img-thumbnail rounded photos position-absolute bg-secondary",
+                style: "transform: skewY(7deg)") %>
+  <%= image_tag(album.images[0].url, class: "img-fluid img-thumbnail rounded photos position-absolute bg-secondary",
+                style: "transform: skewY(3deg)") %>
+  <%= image_tag(album.images[0].url, class: "img-fluid img-thumbnail rounded photos position-absolute bg-secondary",) %>
+  <div class="albums-text rounded-circle flex-column g-0 d-flex align-items-center
+              justify-content-center mb-0 bg-light opacity-50 position-absolute">
+    <p class="mb-0"><%= album.images.size %></p>
+    <p class="mb-0">Photos</p>
+  </div>
+  <% if album.mode == "Private" %>
+    <% @lock_path = "lock_2.png" %>
+  <% elsif album.mode == "Public" %>
+    <% @lock_path = "unlocked.png" %>
+  <% end %>
+  <%= image_tag(@lock_path, class: "position-absolute", style: "top: 30px; right: 30px; height: 30px; width: 30px") %>
+  <p class="fbtn text-centers position-absolute" style="bottom: 0">
+    <%= album.title %>
+  </p>
+</div>

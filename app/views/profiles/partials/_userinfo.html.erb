@@ -21,7 +21,9 @@
         <!--        photos-->
         <p
           class="fbtn border-end border-secondary pe-2"
-          style="font-size: 20px; color: #3b5998"
+          style="font-size: 20px;
+            <% if request.env["REQUEST_PATH"].include?("photos") %> color: #3b5998
+            <% end %>"
         >
           <%= user.photos.count %>
           <span style="font-size: 15px">
@@ -31,9 +33,14 @@
         <!--        Albums-->
         <p
           class="fbtn ms-2 border-end border-secondary pe-2"
-          style="font-size: 20px"
+          style="font-size: 20px;
+            <% if request.env["REQUEST_PATH"].include?("albums") %> color: #3b5998
+            <% end %>"
         >
-          43 <span style="font-size: 15px">ALBUMS</span>
+          <%= user.albums.count %>
+          <span style="font-size: 15px">
+            <%= link_to "ALBUMS", profiles_albums_path, class: "text-decoration-none", style: "color: inherit" %>
+          </span>
         </p>
         <!--        Followings-->
         <p
@@ -47,18 +54,26 @@
           13 <span style="font-size: 15px">FOLLOWERS</span>
         </p>
       </div>
-      <!--      add photo-->
+      <!--      add photo / albums-->
       <div class="d-flex w-100 justify-content-end">
-        <%= link_to "Add Photo", new_photo_path, class: "btn btn-success",
-                    style: "font-size: 15px; font-family: 'Roboto', sans-serif; font-weight: 700;
-											--bs-btn-padding-y: 0.25rem;
-											--bs-btn-padding-x: 0.5rem;
-											--bs-btn-font-size: 0.75rem;" %>
+        <% if request.env["REQUEST_PATH"].include?("photos") %>
+          <%= link_to "Add Photo", new_photo_path, class: "btn btn-success add-photo-album-button" %>
+        <% elsif request.env["REQUEST_PATH"].include?("albums") %>
+          <%= link_to "Add Album", new_album_path, class: "btn btn-success add-photo-album-button" %>
+        <% end %>
       </div>
     </div>
   </div>
-  <!--  render user all photos-->
-  <% user.photos.each do |photo| %>
-    <%= render partial: "profiles/partials/photos", locals: { photo: photo } %>
+
+  <% if request.env["REQUEST_PATH"].include?("photos") %>
+    <!--  render user all photos-->
+    <% user.photos.each do |photo| %>
+      <%= render partial: "profiles/partials/photos", locals: { photo: photo } %>
+    <% end %>
+  <% elsif request.env["REQUEST_PATH"].include?("albums") %>
+    <!--    render user all album-->
+    <% user.albums.each do |album| %>
+      <%= render partial: "profiles/partials/albums", locals: { album: album } %>
+    <% end %>
   <% end %>
 </div>

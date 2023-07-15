@@ -82,3 +82,29 @@
 .login-link-to {
   color: #1f6e8c;
 }
+
+.photos {
+  width: 200px;
+  height: 200px;
+  top: 20px;
+}
+
+.albums-text {
+  width: 100px;
+  height: 70px;
+  font-weight: 700;
+  font-size: 20px;
+  font-family: "Roboto", sans-serif;
+  top: 100px;
+  bottom: 100px;
+  color: #080202;
+}
+
+.add-photo-album-button {
+  font-size: 15px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  --bs-btn-padding-y: 0.25rem;
+  --bs-btn-padding-x: 0.5rem;
+  --bs-btn-font-size: 0.75rem;
+}

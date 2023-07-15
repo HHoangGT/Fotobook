@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
   # Profile routes
   get '/profiles/photos', to: 'profiles#personalpagephoto'
+  get '/profiles/albums', to: 'profiles#personalpagealbum'
 
   root 'main#home'
 end
