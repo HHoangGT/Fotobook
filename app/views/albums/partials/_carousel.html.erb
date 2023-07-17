@@ -1,0 +1,7 @@
+<% if counter == 0 %>
+  <button type="button" data-bs-target="#Indicators<%= id.to_s %>" data-bs-slide-to="<%= counter %>" class="active"
+          aria-current="true" aria-label="Slide <%= counter + 1 %>"></button>
+<% else %>
+  <button type="button" data-bs-target="#Indicators<%= id.to_s %>" data-bs-slide-to="<%= counter %>"
+          aria-label="Slide <%= counter + 1 %>"></button>
+<% end %>

@@ -1,0 +1,9 @@
+<% if counter == 0 %>
+  <div class="carousel-item active">
+    <%= image_tag(image.url, class: "d-block w-100") %>
+  </div>
+<% else %>
+  <div class="carousel-item">
+    <%= image_tag(image.url, class: "d-block w-100") %>
+  </div>
+<% end %>
