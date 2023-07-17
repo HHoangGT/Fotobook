@@ -8,8 +8,8 @@ class AlbumsController < ApplicationController
   def create
     @album = current_user.albums.new album_params
     if @album.save
-      flash[:notice] = 'Update Successfully'
-      redirect_to new_album_path
+      flash[:notice] = 'Create Successfully'
+      redirect_to profiles_albums_path
     else
       flash[:alert] = 'There has been an error while updating album'
       redirect_to new_album_path

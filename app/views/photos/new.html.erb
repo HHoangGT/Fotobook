@@ -6,7 +6,7 @@
   </div>
 </nav>
 
-<div class="container">
+<div class="container" data-controller="photo">
   <%= form_with model: @photo, url: photos_path, method: :post do |f| %>
     <div class="row align-items-center">
       <div class="col col-12 col-md-6">
@@ -31,24 +31,13 @@
     <div class="d-grid gap-4">
       <div class="rounded border-dark border-2 bg-light d-flex align-items-center justify-content-center"
            style="width: 200px; height: 200px; border-style: dashed"
-           onclick="document.getElementById('photo_image').click()">
+           data-action="click->photo#clickUpload">
         <%= image_tag("upload.svg", style: "width: 50px; height: 50px", id: "blah_1") %>
         <%= image_tag("upload.svg", class: "d-none img-fluid", style: "width: 200px, height: 200px", id: "blah_2") %>
       </div>
       <%= f.label :image, class: "d-none" %>
-      <%= f.file_field :image, class: "d-none" %>
+      <%= f.file_field :image, class: "d-none", data: { action: "change->photo#loadImage" } %>
       <%= f.submit "Save", class: "btn btn-success", style: "width: 150px; margin-left: 25px" %>
     </div>
   <% end %>
 </div>
-
-<script>
-    photo_image.onchange = evt => {
-        const [file] = photo_image.files
-        if (file) {
-            blah_2.src = URL.createObjectURL(file)
-            document.getElementById('blah_1').classList.add('d-none')
-            document.getElementById('blah_2').classList.remove('d-none')
-        }
-    }
-</script>
