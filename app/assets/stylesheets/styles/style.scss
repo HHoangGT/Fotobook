@@ -113,3 +113,30 @@
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
 }
+
+.total-files {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.render-images {
+  width: 200px;
+  height: 200px;
+  border-style: dashed
+}
+
+.back-button {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  background-color: #3b5998;
+  color: white;
+  width: 60px;
+  height: 30px;
+
+  &:hover {
+    color: #FFFCEA;
+    background-color: #2F89FC;
+  }
+}

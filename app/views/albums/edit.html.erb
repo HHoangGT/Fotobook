@@ -1,0 +1,57 @@
+<div class="d-flex align-items-center justify-content-between border-bottom border-secondary-subtle mb-3">
+  <nav class="navbar bg-white">
+    <div class="container">
+      <h2 class="navbar-brand profile-title">
+        Edit Album
+      </h2>
+    </div>
+  </nav>
+  <%= link_to "Back", profiles_albums_path, class: "btn rounded-1 pt-1 back-button text-decoration-none" %>
+</div>
+
+<div class="container" data-controller="album">
+  <%= form_with model: @album, url: album_path, method: :patch do |f| %>
+    <div class="row align-items-center">
+      <div class="col col-12 col-md-6">
+        <div class="mb-3">
+          <%= f.label :title, "Title", class: "form-label profile-title",
+                      style: "font-size: 13px;" %>
+          <%= f.text_field :title, class: "form-control", placeholder: "Photo title" %>
+        </div>
+
+        <%= f.label :mode, "Sharing mode", class: "form-label profile-title",
+                    style: "font-size: 13px;" %>
+        <%= f.select :mode, ["Public", "Private"], {}, class: "form-select" %>
+      </div>
+
+      <div class="col col-12 col-md-6">
+        <div class="mb-3">
+          <%= f.label :description, "Description", class: "form-label profile-title",
+                      style: "font-size: 13px;" %>
+          <%= f.text_area :description, class: "form-control", rows: "6", placeholder: "Photo description" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-grid gap-2">
+      <p class="total-files mb-0"><span id="total-images"><%= @album.images.size %></span> File(s) Selected</p>
+      <div class="rounded border-dark border-2 bg-light d-flex align-items-center justify-content-center"
+           style="width: 200px; height: 200px; border-style: dashed"
+           data-action="click->album#clickUpload">
+        <%= image_tag("upload.svg", style: "width: 50px; height: 50px", id: "blah_1") %>
+      </div>
+      <%= f.label :images, class: "d-none" %>
+      <%= f.file_field :images, multiple: true, class: "d-none", data: { action: "change->album#loadImages", } %>
+      <div class="row px-2 d-flex justify-content-start gap-3 align-items-center">
+        <% @album.images.each do |image| %>
+          <%= render partial: "albums/partials/editImages", locals: { image: image } %>
+        <% end %>
+      </div>
+      <div id="images" class="row px-2 d-flex justify-content-start gap-3 align-items-center"></div>
+      <div class="d-flex gap-3">
+        <%= f.submit "Save", name: "save", class: "btn btn-success", style: "width: 100px" %>
+        <%= f.submit "Delete", name: "delete", class: "btn btn-danger", style: "width: 100px" %>
+      </div>
+    </div>
+  <% end %>
+</div>

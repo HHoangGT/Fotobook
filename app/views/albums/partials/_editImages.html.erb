@@ -1,0 +1,9 @@
+<div class="rounded border-dark border-2 bg-light render-images position-relative
+                                    col-12 col-md-3 d-flex align-items-center justify-content-center px-0 mb-3">
+  <%= image_tag(image.url, class: "img-fluid", id: image.identifier) %>
+  <div style="width: 30px; height: 30px" id="blah_3" data-action="click->album#deleteImage"
+       data-album-file-name-param="<%= image.identifier %>">
+    <%= image_tag("cancel.png", style: "position: absolute; top: 5px; right: 5px; width: 20px; height: 20px") %>
+  </div>
+  <%= hidden_field :album, :images, multiple: true, value: image.identifier %>
+</div>

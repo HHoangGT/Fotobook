@@ -16,6 +16,33 @@ class AlbumsController < ApplicationController
     end
   end
 
+  def edit
+    @album = Album.find(params[:id])
+  end
+
+  def update
+    @album = Album.find(params[:id])
+    if params[:save].present?
+      if @album.update(album_params)
+        flash[:notice] = 'Uploaded album successfully'
+        redirect_to profiles_albums_path
+      else
+        flash[:alert] = 'There has been an error when uploading album'
+        redirect_to edit_album_path
+      end
+    elsif params[:delete].present?
+      if @album.destroy
+        flash[:notice] = 'Delete album successfully'
+        redirect_to profiles_albums_path
+      else
+        flash[:alert] = 'There has been an error when deleting album'
+        redirect_to edit_album_path
+      end
+    else
+      render 'albums/edit'
+    end
+  end
+
   private
 
   def required_login

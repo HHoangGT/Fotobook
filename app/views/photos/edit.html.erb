@@ -1,10 +1,13 @@
-<nav class="navbar bg-white border-bottom border-secondary-subtle mb-3">
-  <div class="container">
-    <h2 class="navbar-brand profile-title">
-      Edit Photo
-    </h2>
-  </div>
-</nav>
+<div class="d-flex align-items-center justify-content-between border-bottom border-secondary-subtle mb-3">
+  <nav class="navbar bg-white">
+    <div class="container">
+      <h2 class="navbar-brand profile-title">
+        Edit Photo
+      </h2>
+    </div>
+  </nav>
+  <%= link_to "Back", profiles_photos_path, class: "btn rounded-1 pt-1 back-button text-decoration-none" %>
+</div>
 
 <div class="container" data-controller="photo">
   <%= form_with model: @photo, url: photo_path, method: :patch do |f| %>

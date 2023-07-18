@@ -22,7 +22,6 @@ class PhotosController < ApplicationController
 
   def update
     @photo = Photo.find(params[:id])
-    puts params
     if params[:save].present?
       if @photo.update(photo_params)
         flash[:notice] = 'Uploaded successfully'
