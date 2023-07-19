@@ -11,9 +11,8 @@
   <div class="col-12 col-sm-5 col-lg-9 p-4">
     <div class="d-flex flex-column align-items-start justify-content-center">
       <!--      Edit profile link-->
-      <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-info fbtn mb-3 ms-2",
-                  style: " color: #3b5998;border-color: #3b5998;--bs-btn-padding-y: 0.25rem;--bs-btn-padding-x: 0.5rem;
-                  --bs-btn-font-size: 0.75rem" %>
+      <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-info fbtn mb-3 ms-2 add-photo-album-button",
+                  style: " color: #3b5998; border-color: #3b5998" %>
       <!--      User name-->
       <h2 style="font-family: 'Roboto', sans-serif; font-weight: 700" class="ms-2">
         <%= user.fname + " " + user.lname %>
@@ -51,7 +50,7 @@
             <% if request.env["REQUEST_PATH"].include?("followings") %> color: #3b5998
             <% end %> "
         >
-          22
+          <%= user.followings.count %>
           <span style="font-size: 15px">
             <%= link_to "FOLLOWINGS", profiles_followings_path, class: "text-decoration-none", style: "color: inherit" %>
           </span>
@@ -60,7 +59,7 @@
         <p class="fbtn ms-2" style="font-size: 20px;
           <% if request.env["REQUEST_PATH"].include?("followers") %> color: #3b5998
           <% end %>">
-          13
+          <%= user.followers.count %>
           <span style="font-size: 15px">
             <%= link_to "FOLLOWERS", profiles_followers_path, class: "text-decoration-none", style: "color: inherit" %>
           </span>
@@ -86,6 +85,16 @@
     <!--    render user all album-->
     <% user.albums.each do |album| %>
       <%= render partial: "profiles/partials/albums", locals: { album: album } %>
+    <% end %>
+  <% elsif request.env["REQUEST_PATH"].include?("followings") %>
+    <!--    render user all followings-->
+    <% user.followings.each do |following| %>
+      <%= render partial: "profiles/partials/follow", locals: { follow: following } %>
+    <% end %>
+  <% elsif request.env["REQUEST_PATH"].include?("followers") %>
+    <!--  render user all followers-->
+    <% user.followers.each do |follower| %>
+      <%= render partial: "profiles/partials/follow", locals: { follow: follower } %>
     <% end %>
   <% end %>
 </div>

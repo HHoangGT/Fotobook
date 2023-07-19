@@ -107,6 +107,11 @@
   --bs-btn-padding-y: 0.25rem;
   --bs-btn-padding-x: 0.5rem;
   --bs-btn-font-size: 0.75rem;
+
+  &:hover {
+    color: #FFFCEA;
+    background-color: #2F89FC;
+  }
 }
 
 .profile-title {
@@ -139,4 +144,16 @@
     color: #FFFCEA;
     background-color: #2F89FC;
   }
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+}
+
+.follow-tag {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #3b5998;
 }
