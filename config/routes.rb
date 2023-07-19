@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   # Profile routes
   get '/profiles/photos', to: 'profiles#personalpagephoto'
   get '/profiles/albums', to: 'profiles#personalpagealbum'
+  get '/profiles/followers', to: 'profiles#personalpagefollower'
+  get '/profiles/followings', to: 'profiles#personalpagefollowing'
 
   root 'main#home'
 end

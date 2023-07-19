@@ -9,6 +9,14 @@ class ProfilesController < ApplicationController
     @user = current_user
   end
 
+  def personalpagefollower
+    @user = current_user
+  end
+
+  def personalpagefollowing
+    @user = current_user
+  end
+
   private
 
   def required_login

@@ -47,13 +47,23 @@
         <!--        Followings-->
         <p
           class="fbtn ms-2 border-end border-secondary pe-2"
-          style="font-size: 20px"
+          style="font-size: 20px;
+            <% if request.env["REQUEST_PATH"].include?("followings") %> color: #3b5998
+            <% end %> "
         >
-          22 <span style="font-size: 15px">FOLLOWINGS</span>
+          22
+          <span style="font-size: 15px">
+            <%= link_to "FOLLOWINGS", profiles_followings_path, class: "text-decoration-none", style: "color: inherit" %>
+          </span>
         </p>
         <!--        Followers-->
-        <p class="fbtn ms-2" style="font-size: 20px">
-          13 <span style="font-size: 15px">FOLLOWERS</span>
+        <p class="fbtn ms-2" style="font-size: 20px;
+          <% if request.env["REQUEST_PATH"].include?("followers") %> color: #3b5998
+          <% end %>">
+          13
+          <span style="font-size: 15px">
+            <%= link_to "FOLLOWERS", profiles_followers_path, class: "text-decoration-none", style: "color: inherit" %>
+          </span>
         </p>
       </div>
       <!--      add photo / albums-->
