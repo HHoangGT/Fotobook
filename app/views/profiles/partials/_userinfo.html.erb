@@ -10,9 +10,22 @@
   <!--  user overall info-->
   <div class="col-12 col-sm-5 col-lg-9 p-4">
     <div class="d-flex flex-column align-items-start justify-content-center">
-      <!--      Edit profile link-->
-      <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-info fbtn mb-3 ms-2 add-photo-album-button",
-                  style: " color: #3b5998; border-color: #3b5998" %>
+      <% if user == current_user %>
+        <!--      Edit profile link-->
+        <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-info fbtn mb-3 ms-2 add-photo-album-button",
+                    style: " color: #3b5998; border-color: #3b5998" %>
+      <% else %>
+        <!--        follow button public profile-->
+        <% if user.followers.ids.include?(current_user.id) %>
+          <%= button_to "following", unfollow_path(current_user, user), method: :patch,
+                        class: "btn btn-outline-info text-white fbtn mb-3 ms-2 add-photo-album-button",
+                        style: " color: #3b5998; border-color: #3b5998; background-color: #3b5998" %>
+        <% else %>
+          <%= button_to "follow", follow_path(current_user, user), method: :patch,
+                        class: "btn btn-outline-info fbtn mb-3 ms-2 add-photo-album-button",
+                        style: " color: #3b5998; border-color: #3b5998" %>
+        <% end %>
+      <% end %>
       <!--      User name-->
       <h2 style="font-family: 'Roboto', sans-serif; font-weight: 700" class="ms-2">
         <%= user.fname + " " + user.lname %>
@@ -26,9 +39,17 @@
             <% if request.env["REQUEST_PATH"].include?("photos") %> color: #3b5998
             <% end %>"
         >
-          <%= user.photos.count %>
+          <% if user == current_user %>
+            <%= user.photos.count %>
+          <% else %>
+            <%= user.photos.count { |photo| photo.mode == "Public" } %>
+          <% end %>
           <span style="font-size: 15px">
-            <%= link_to "PHOTOS", profiles_photos_path, class: "text-decoration-none", style: "color: inherit;" %>
+            <% if user == current_user %>
+              <%= link_to "PHOTOS", profiles_photos_path, class: "text-decoration-none", style: "color: inherit;" %>
+            <% else %>
+              <%= link_to "PHOTOS", public_photo_path, class: "text-decoration-none", style: "color: inherit;" %>
+            <% end %>
           </span>
         </p>
         <!--        Albums-->
@@ -38,9 +59,17 @@
             <% if request.env["REQUEST_PATH"].include?("albums") %> color: #3b5998
             <% end %>"
         >
-          <%= user.albums.count %>
+          <% if user == current_user %>
+            <%= user.albums.count %>
+          <% else %>
+            <%= user.albums.count { |album| album.mode == "Public" } %>
+          <% end %>
           <span style="font-size: 15px">
-            <%= link_to "ALBUMS", profiles_albums_path, class: "text-decoration-none", style: "color: inherit" %>
+            <% if user == current_user %>
+              <%= link_to "ALBUMS", profiles_albums_path, class: "text-decoration-none", style: "color: inherit" %>
+            <% else %>
+              <%= link_to "ALBUMS", public_album_path, class: "text-decoration-none", style: "color: inherit" %>
+            <% end %>
           </span>
         </p>
         <!--        Followings-->
@@ -52,7 +81,11 @@
         >
           <%= user.followings.count %>
           <span style="font-size: 15px">
-            <%= link_to "FOLLOWINGS", profiles_followings_path, class: "text-decoration-none", style: "color: inherit" %>
+            <% if user == current_user %>
+             <%= link_to "FOLLOWINGS", profiles_followings_path, class: "text-decoration-none", style: "color: inherit" %>
+            <% else %>
+             <%= link_to "FOLLOWINGS", public_followings_path, class: "text-decoration-none", style: "color: inherit" %>
+            <% end %>
           </span>
         </p>
         <!--        Followers-->
@@ -61,30 +94,48 @@
           <% end %>">
           <%= user.followers.count %>
           <span style="font-size: 15px">
-            <%= link_to "FOLLOWERS", profiles_followers_path, class: "text-decoration-none", style: "color: inherit" %>
+            <% if user == current_user %>
+              <%= link_to "FOLLOWERS", profiles_followers_path, class: "text-decoration-none", style: "color: inherit" %>
+            <% else %>
+              <%= link_to "FOLLOWERS", public_followers_path, class: "text-decoration-none", style: "color: inherit" %>
+            <% end %>
           </span>
         </p>
       </div>
       <!--      add photo / albums-->
-      <div class="d-flex w-100 justify-content-end">
-        <% if request.env["REQUEST_PATH"].include?("photos") %>
-          <%= link_to "Add Photo", new_photo_path, class: "btn btn-success add-photo-album-button" %>
-        <% elsif request.env["REQUEST_PATH"].include?("albums") %>
-          <%= link_to "Add Album", new_album_path, class: "btn btn-success add-photo-album-button" %>
-        <% end %>
-      </div>
+      <% if current_user == user %>
+        <div class="d-flex w-100 justify-content-end">
+          <% if request.env["REQUEST_PATH"].include?("photos") %>
+            <%= link_to "Add Photo", new_photo_path, class: "btn btn-success add-photo-album-button" %>
+          <% elsif request.env["REQUEST_PATH"].include?("albums") %>
+            <%= link_to "Add Album", new_album_path, class: "btn btn-success add-photo-album-button" %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   </div>
 
   <% if request.env["REQUEST_PATH"].include?("photos") %>
     <!--  render user all photos-->
-    <% user.photos.each do |photo| %>
-      <%= render partial: "profiles/partials/photos", locals: { photo: photo } %>
+    <% user.photos.each do |photo, id: user.id| %>
+      <% if user == current_user %>
+        <%= render partial: "profiles/partials/photos", locals: { photo: photo, id: id } %>
+      <% else %>
+        <% if photo.mode == "Public" %>
+          <%= render partial: "profiles/partials/photos", locals: { photo: photo, id: id } %>
+        <% end %>
+      <% end %>
     <% end %>
   <% elsif request.env["REQUEST_PATH"].include?("albums") %>
     <!--    render user all album-->
-    <% user.albums.each do |album| %>
-      <%= render partial: "profiles/partials/albums", locals: { album: album } %>
+    <% user.albums.each do |album, id: user.id| %>
+      <% if user == current_user %>
+        <%= render partial: "profiles/partials/albums", locals: { album: album, id: id } %>
+      <% else %>
+        <% if album.mode == "Public" %>
+          <%= render partial: "profiles/partials/albums", locals: { album: album, id: id } %>
+        <% end %>
+      <% end %>
     <% end %>
   <% elsif request.env["REQUEST_PATH"].include?("followings") %>
     <!--    render user all followings-->

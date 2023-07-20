@@ -13,16 +13,18 @@
         <p class="mb-0"><%= album.images.size %></p>
         <p class="mb-0">Photos</p>
       </div>
-      <% if album.mode == "Private" %>
-        <% @lock_path = "lock_2.png" %>
-      <% elsif album.mode == "Public" %>
-        <% @lock_path = "unlocked.png" %>
+      <% if current_user.id == id %>
+        <% if album.mode == "Private" %>
+          <% @lock_path = "lock_2.png" %>
+        <% elsif album.mode == "Public" %>
+          <% @lock_path = "unlocked.png" %>
+        <% end %>
+        <%= image_tag(@lock_path, class: "position-absolute", style: "top: 30px; right: 20px; height: 30px; width: 30px") %>
+        <%= link_to "Edit", edit_album_path(album.id),
+                    class: "btn fbtn position-absolute text-decoration-none opacity-50 bg-light text-center p-0",
+                    style: "height: 25px; width: 50px; font-size: 16px; bottom: 50px; right: 20px",
+                    data: { bs_toggle: "modal-ignore" } %>
       <% end %>
-      <%= image_tag(@lock_path, class: "position-absolute", style: "top: 30px; right: 20px; height: 30px; width: 30px") %>
-      <%= link_to "Edit", edit_album_path(album.id),
-                  class: "btn fbtn position-absolute text-decoration-none opacity-50 bg-light text-center p-0",
-                  style: "height: 25px; width: 50px; font-size: 16px; bottom: 50px; right: 20px",
-                  data: { bs_toggle: "modal-ignore" } %>
     </div>
     <p class="fbtn text-centers position-absolute" style="bottom: 0">
       <%= album.title %>

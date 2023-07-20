@@ -16,6 +16,6 @@ class FollowsController < ApplicationController
     else
       Follow.create(follower: User.find_by(id: params[:follower_id]), followed: User.find_by(id: params[:followed_id]))
     end
-    redirect_to profiles_followers_path
+    redirect_to request.referer
   end
 end

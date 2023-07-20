@@ -7,30 +7,52 @@ align-items-center justify-content-center"
     <%= image_tag(follow.avatar.url, class: "rounded-circle mt-2 img-fluid user-avatar") %>
   <% end %>
   <h5 style="font-family: 'Roboto', sans-serif; font-weight: 700; color: #2F3032 !important;"
-      class="mb-0"><%= follow.fname + ' ' + follow.lname %></h5>
+      class="mb-0">
+    <% if current_user != follow %>
+      <%= link_to follow.fname + ' ' + follow.lname, public_photo_path(follow.id),
+                  class: "text-decoration-none", style: "color: inherit" %>
+    <% else %>
+      <%= link_to follow.fname + ' ' + follow.lname, profiles_photos_path,
+                  class: "text-decoration-none", style: "color: inherit" %>
+    <% end %>
+  </h5>
   <div class="d-flex align-items-center justify-content-evenly w-100">
     <div class="d-flex flex-column align-items-center justify-content-center follow-tag">
-      <p class="mb-0" style="font-weight: 700"><%= follow.photos.count %></p>
+      <p class="mb-0" style="font-weight: 700">
+        <% if current_user != follow %>
+          <%= follow.photos.count { |photo| photo.mode == "Public" } %>
+        <% else %>
+          <%= follow.photos.count %>
+        <% end %>
+      </p>
       <p class="mb-0">PHOTOS</p>
     </div>
     <div class="d-flex flex-column align-items-center justify-content-center follow-tag">
-      <p class="mb-0" style="font-weight: 700"><%= follow.albums.count %></p>
+      <p class="mb-0" style="font-weight: 700">
+        <% if current_user != follow %>
+          <%= follow.albums.count { |album| album.mode == "Public" } %>
+        <% else %>
+          <%= follow.albums.count %>
+        <% end %>
+      </p>
       <p class="mb-0">ALBUMS</p>
     </div>
   </div>
-  <% if request.env["REQUEST_PATH"].include?("followings") %>
-    <%= button_to "unfollow", unfollow_path(current_user, follow), method: :patch,
-                  class: "btn btn-outline-info fbtn mb-3 ms-2 add-photo-album-button",
-                  style: " color: #3b5998; border-color: #3b5998" %>
-  <% elsif request.env["REQUEST_PATH"].include?("followers") %>
-    <% if follow.followers.ids.include?(current_user.id) %>
-      <%= button_to "following", unfollow_path(current_user, follow), method: :patch,
-                    class: "btn btn-outline-info text-white fbtn mb-3 ms-2 add-photo-album-button",
-                    style: " color: #3b5998; border-color: #3b5998; background-color: #3b5998" %>
-    <% else %>
-      <%= button_to "follow", follow_path(current_user, follow), method: :patch,
+  <% if follow != current_user %>
+    <% if request.env["REQUEST_PATH"].include?("followings") %>
+      <%= button_to "unfollow", unfollow_path(current_user, follow), method: :patch,
                     class: "btn btn-outline-info fbtn mb-3 ms-2 add-photo-album-button",
                     style: " color: #3b5998; border-color: #3b5998" %>
+    <% elsif request.env["REQUEST_PATH"].include?("followers") %>
+      <% if follow.followers.ids.include?(current_user.id) %>
+        <%= button_to "following", unfollow_path(current_user, follow), method: :patch,
+                      class: "btn btn-outline-info text-white fbtn mb-3 ms-2 add-photo-album-button",
+                      style: " color: #3b5998; border-color: #3b5998; background-color: #3b5998" %>
+      <% else %>
+        <%= button_to "follow", follow_path(current_user, follow), method: :patch,
+                      class: "btn btn-outline-info fbtn mb-3 ms-2 add-photo-album-button",
+                      style: " color: #3b5998; border-color: #3b5998" %>
+      <% end %>
     <% end %>
   <% end %>
 </div>
