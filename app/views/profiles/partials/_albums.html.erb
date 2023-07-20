@@ -1,12 +1,13 @@
-<div class="col-12 col-sm-6 col-lg-3 my-3">
+<div class="col-12 col-sm-6 col-lg-3 my-3 mt-0">
   <div class="d-flex flex-column align-items-center position-relative">
-    <div class="position-relative w-100 d-flex flex-column align-items-center" style="height: 280px"
-         data-bs-toggle="modal" data-bs-target="#<%= album.id %>">
+    <div class="position-relative w-100 d-flex flex-column align-items-center" style="height: 260px">
       <%= image_tag(album.images[0].url, class: "img-fluid img-thumbnail rounded photos position-absolute bg-secondary",
                     style: "transform: skewY(8deg)") %>
       <%= image_tag(album.images[0].url, class: "img-fluid img-thumbnail rounded photos position-absolute bg-secondary",
                     style: "transform: skewY(4deg)") %>
-      <%= image_tag(album.images[0].url, class: "img-fluid img-thumbnail rounded photos position-absolute bg-secondary",) %>
+      <%= image_tag(album.images[0].url,
+                    class: " img-fluid img-thumbnail rounded photos position-absolute bg-secondary",
+                    data: { bs_toggle: "modal", bs_target: '#' + album.id.to_s }) %>
       <div class="albums-text rounded-circle flex-column g-0 d-flex align-items-center
               justify-content-center mb-0 bg-light opacity-50 position-absolute">
         <p class="mb-0"><%= album.images.size %></p>
@@ -17,14 +18,15 @@
       <% elsif album.mode == "Public" %>
         <% @lock_path = "unlocked.png" %>
       <% end %>
-      <%= image_tag(@lock_path, class: "position-absolute", style: "top: 30px; right: 30px; height: 30px; width: 30px") %>
+      <%= image_tag(@lock_path, class: "position-absolute", style: "top: 30px; right: 20px; height: 30px; width: 30px") %>
+      <%= link_to "Edit", edit_album_path(album.id),
+                  class: "btn fbtn position-absolute text-decoration-none opacity-50 bg-light text-center p-0",
+                  style: "height: 25px; width: 50px; font-size: 16px; bottom: 50px; right: 20px",
+                  data: { bs_toggle: "modal-ignore" } %>
     </div>
     <p class="fbtn text-centers position-absolute" style="bottom: 0">
       <%= album.title %>
     </p>
-    <%= link_to "Edit", edit_album_path(album.id),
-                class: "btn fbtn position-absolute text-decoration-none opacity-50 bg-light text-center p-0",
-                style: "height: 25px; width: 50px; font-size: 16px; bottom: 70px; right: 25px" %>
   </div>
 </div>
 
