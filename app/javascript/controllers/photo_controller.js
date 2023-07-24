@@ -4,7 +4,6 @@ import {Controller} from "@hotwired/stimulus"
 export default class extends Controller {
 
     loadImage() {
-        console.log("Hello")
         const [file] = photo_image.files
         if (file) {
             blah_2.src = URL.createObjectURL(file)

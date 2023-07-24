@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   # Feeds & Discovers routes
   get 'feeds/photos', to: 'feeds#photo', as: 'feed_photos'
   get 'feeds/albums', to: 'feeds#album', as: 'feed_albums'
+  get 'discover/photos', to: 'discovers#photo', as: 'discover_photos'
+  get 'discover/albums', to: 'discovers#album', as: 'discover_albums'
   # follow route
   patch '/follow/unfollow/:follower_id/:followed_id', to: 'follows#unfollow', as: 'unfollow'
   patch '/follow/:follower_id/:followed_id', to: 'follows#follow', as: 'follow'

@@ -4,12 +4,13 @@ class PhotosController < ApplicationController
   end
 
   def create
-    @photo = current_user.photos.new photo_params
+    @photo = current_user.photos.build photo_params
     if @photo.save
       flash[:notice] = 'Update Successfully'
       redirect_to profiles_photos_path
     else
-      flash[:alert] = 'There has been an error while updating image'
+      # flash[:alert] = 'There has been an error while updating image'
+      flash[:alert] = @photo.errors.full_messages
       redirect_to new_photo_path
     end
   end

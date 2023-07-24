@@ -4,12 +4,13 @@ class AlbumsController < ApplicationController
   end
 
   def create
-    @album = current_user.albums.new album_params
+    @album = current_user.albums.build album_params
     if @album.save
       flash[:notice] = 'Create Successfully'
       redirect_to profiles_albums_path
     else
-      flash[:alert] = 'There has been an error while updating album'
+      # flash[:alert] = 'There has been an error while updating album'
+      flash[:alert] = @photo.errors.full_messages
       redirect_to new_album_path
     end
   end
