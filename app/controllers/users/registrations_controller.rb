@@ -29,11 +29,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # def update_resource(resource, params)
-  #   return super if params[:password].present?
-  #
-  #   resource.update_without_password(params.except(:password))
-  # end
+  def update_resource(resource, params)
+    return super if params[:current_password].present?
+
+    resource.update_without_password(params.except(:current_password))
+  end
 
   # GET /resource/cancel
   # Forces the session data which is usually expired after sign

@@ -1,0 +1,10 @@
+<%= render partial: 'feeds/partials/buttons' %>
+<div class="row row-cols-1 row-cols-lg-2 ">
+  <% @users.each do |user| %>
+    <% user.photos.each do |photo| %>
+      <% if photo.mode == "Public" %>
+        <%= render partial: "feeds/partials/photo", locals: { photo: photo, user: user } %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

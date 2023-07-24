@@ -32,35 +32,4 @@
   </div>
 </div>
 
-<div class="modal fade" id="<%= album.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fbtn text-dark" style="font-size: 20px" id="exampleModalLabel"><%= album.title %></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body justify-content-center">
-        <%#= image_tag(album.images[0].url, class: "img-fluid rounded w-100 h-100") %>
-        <div id="Indicators<%= album.id %>" class="carousel slide">
-          <div class="carousel-indicators">
-            <% album.images.each_with_index do |image, counter| %>
-              <%= render partial: "albums/partials/carousel", locals: { image: image, counter: counter, id: album.id } %>
-            <% end %>
-          </div>
-          <div class="carousel-inner">
-            <% album.images.each_with_index do |image, counter| %>
-              <%= render partial: 'albums/partials/photos', locals: { image: image, counter: counter } %>
-            <% end %>
-          </div>
-          <!--          carousel indicator-->
-          <% album.images.each_with_index do |image, counter| %>
-            <%= render partial: "albums/partials/carouselFooter", locals: { image: image, counter: counter, id: album.id } %>
-          <% end %>
-        </div>
-      </div>
-      <div class="modal-footer justify-content-start">
-        <p class="fbtn text-dark" style="font-weight: 400; font-size: 14px"><%= album.description %></p>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render partial: 'layouts/partials/modalalbum', locals: { album: album } %>

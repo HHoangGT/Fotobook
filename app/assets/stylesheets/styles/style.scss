@@ -59,7 +59,7 @@
 }
 
 .feed-button:hover {
-  background-color: #9db2bf !important;
+  background-color: #3b5980 !important;
 }
 
 .fbtn {
@@ -156,4 +156,48 @@
   font-weight: 400;
   font-size: 18px;
   color: #3b5998;
+}
+
+.left-button {
+  margin-right: -1px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  color: white;
+
+  //background-color: white;
+  //color: #3b5998;
+}
+
+.left-button-album {
+  margin-right: -1px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  background-color: white;
+  color: #3b5998;
+}
+
+.right-button {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  background-color: white;
+  color: #3b5998;
+
+  //color: white;
+}
+
+.right-button-album {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  color: white;
+}
+
+.photo-card-font {
+  font-family: 'Roboto', sans-serif;
+  color: #080202;
+  font-size: 13px;
+}
+
+.following-user-name-font {
+  background-color: #3b5998;
+  font-weight: 400;
 }

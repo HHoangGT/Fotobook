@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { registrations: 'users/registrations' }
 
   devise_scope :user do
     get '/users/sign_out' => 'devise/sessions#destroy'
@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   get 'profiles/:id/albums', to: 'public_profiles#album', as: 'public_album'
   get 'profiles/:id/followings', to: 'public_profiles#following', as: 'public_followings'
   get 'profiles/:id/followers', to: 'public_profiles#follower', as: 'public_followers'
+  # Feeds & Discovers routes
+  get 'feeds/photos', to: 'feeds#photo', as: 'feed_photos'
+  get 'feeds/albums', to: 'feeds#album', as: 'feed_albums'
   # follow route
   patch '/follow/unfollow/:follower_id/:followed_id', to: 'follows#unfollow', as: 'unfollow'
   patch '/follow/:follower_id/:followed_id', to: 'follows#follow', as: 'follow'

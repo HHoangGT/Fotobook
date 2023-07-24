@@ -1,0 +1,9 @@
+<div class="d-flex align-items-center justify-content-center g-0 pb-4">
+  <% if request.env["REQUEST_PATH"].include?("photos") %>
+    <%= link_to "PHOTO", feed_photos_path, class: "btn feed-button px-0 left-button" %>
+    <%= link_to "ALBUM", feed_albums_path, class: "btn feed-button px-0 border-dark right-button" %>
+  <% else %>
+    <%= link_to "PHOTO", feed_photos_path, class: "btn feed-button px-0 border-dark left-button-album" %>
+    <%= link_to "ALBUM", feed_albums_path, class: "btn feed-button px-0 right-button-album" %>
+  <% end %>
+</div>

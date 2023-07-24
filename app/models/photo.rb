@@ -1,5 +1,7 @@
 class Photo < ApplicationRecord
   belongs_to :user
+  has_many :liked_photos
+  has_many :like_user, through: :liked_photos, source: :user
   mount_uploader :image, ImageUploader
 
   validates :title, presence: true, length: { maximum: 140 }

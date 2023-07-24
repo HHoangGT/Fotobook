@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_19_032355) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_21_025807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -34,6 +34,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_19_032355) do
     t.index ["followed_id"], name: "index_follows_on_followed_id"
     t.index ["follower_id", "followed_id"], name: "index_follows_on_follower_id_and_followed_id", unique: true
     t.index ["follower_id"], name: "index_follows_on_follower_id"
+  end
+
+  create_table "liked_albums", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "album_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["album_id"], name: "index_liked_albums_on_album_id"
+    t.index ["user_id"], name: "index_liked_albums_on_user_id"
+  end
+
+  create_table "liked_photos", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "photo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["photo_id"], name: "index_liked_photos_on_photo_id"
+    t.index ["user_id"], name: "index_liked_photos_on_user_id"
   end
 
   create_table "photos", force: :cascade do |t|
@@ -60,6 +78,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_19_032355) do
     t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "avatar"
@@ -68,5 +88,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_19_032355) do
   end
 
   add_foreign_key "albums", "users"
+  add_foreign_key "liked_albums", "albums"
+  add_foreign_key "liked_albums", "users"
+  add_foreign_key "liked_photos", "photos"
+  add_foreign_key "liked_photos", "users"
   add_foreign_key "photos", "users"
 end

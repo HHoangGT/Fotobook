@@ -2,7 +2,14 @@
   <div class="row me-0 bg-light" style="height: 100%">
     <div class="col-2 h-100 pt-5">
       <div class="d-grid gap-2 col-6 mx-md-auto m-0 text-start">
-        <button class="btn fbtn text-start p-0" type="button">Feeds</button>
+        <% if request.env["REQUEST_PATH"].include?("feeds") %>
+          <%= link_to "Feeds", feed_photos_path,
+                      class: "btn fbtn text-start p-0 text-decoration none", style: "color: #3b5998" %>
+        <% else %>
+          <%= link_to "Feeds", feed_photos_path,
+                      class: "btn fbtn text-start p-0 text-decoration none" %>
+        <% end %>
+        <!--        <button class="btn fbtn text-start p-0" type="button">Feeds</button>-->
         <button class="btn fbtn text-start p-0" type="button">
           Discover
         </button>

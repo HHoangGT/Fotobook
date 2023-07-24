@@ -2,11 +2,16 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :trackable
   mount_uploader :avatar, AvatarUploader
 
   has_many :photos, dependent: :destroy
   has_many :albums, dependent: :destroy
+
+  has_many :liked_photos, dependent: :destroy
+  has_many :like_photos, through: :liked_photos, source: :photo
+  has_many :liked_albums, dependent: :destroy
+  has_many :like_albums, through: :liked_albums, source: :album
 
   # For users being followed
   has_many :followers_relationships, foreign_key: :followed_id, class_name: 'Follow', dependent: :destroy

@@ -1,0 +1,55 @@
+<div class="col mb-3">
+  <div class="card h-100 bg-light" style="max-width: 540px">
+    <div class="row g-0 pt-3 pb-5 bg-light photo-card-font">
+      <!--      Following user uploaded photo-->
+      <div class="col-6 position-relative" data-bs-toggle="modal" data-bs-target="#<%= album.id %>" style="min-height: 250px">
+        <%= image_tag(album.images[0].url, class: "img-fluid img-thumbnail rounded position-absolute bg-secondary",
+                      style: "transform: skewY(8deg)") %>
+        <%= image_tag(album.images[0].url, class: "img-fluid img-thumbnail rounded position-absolute bg-secondary",
+                      style: "transform: skewY(4deg)") %>
+        <%= image_tag(album.images[0].url, class: "img-fluid img-thumbnail position-absolute rounded bg-secondary") %>
+      </div>
+      <div class="col-6">
+        <!--        Photo info-->
+        <div class="card-body position-relative h-100">
+          <div class="align-items-center d-inline-flex mb-1">
+            <!--            following user avatar-->
+            <div class="me-2 mb-0 text-center avatar-header following-user-name-font">
+              <% if user.avatar.file.nil? %>
+                <p class="mb-0 text-white"><%= user.fname[0] + user.lname[0] %></p>
+              <% else %>
+                <%= image_tag(user.avatar.url, class: "img-thumbnail border-0 p-0 rounded-circle") %>
+              <% end %>
+            </div>
+            <!--            following user name-->
+            <p class="me-4 mb-0" style="font-weight: 700; color: #3b5998">
+              <%= user.fname + ' ' + user.lname %>
+            </p>
+          </div>
+          <!--          Photo title-->
+          <h5 class="card-title" style="font-weight: 700; font-size: 14px">
+            <%= album.title %>
+          </h5>
+          <!--          photo description-->
+          <p class="card-text text-start" style="font-weight: 400; line-height: 15px; max-width: 255px">
+            <%= album.description %>
+          </p>
+          <!--          Photo footer-->
+          <div class="d-flex justify-content-evenly align-items-center w-auto position-absolute"
+               style="bottom: 10px; min-width: 200px">
+            <div class="d-inline-flex align-items-center">
+              <%= render partial: 'feeds/partials/likes', locals: { photo: album } %>
+            </div>
+            <p class="card-text d-inline-flex ms-auto">
+              <small class="text-body-secondary">
+                <%= album.updated_at.in_time_zone("Asia/Ho_Chi_Minh").strftime("%I:%M %p %d/%m/%Y") %>
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render partial: 'layouts/partials/modalalbum', locals: { album: album } %>
