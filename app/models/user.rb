@@ -8,10 +8,34 @@ class User < ApplicationRecord
   has_many :photos, dependent: :destroy
   has_many :albums, dependent: :destroy
 
-  has_many :liked_photos, dependent: :destroy
-  has_many :like_photos, through: :liked_photos, source: :photo
-  has_many :liked_albums, dependent: :destroy
-  has_many :like_albums, through: :liked_albums, source: :album
+  has_many :photo_likeables, dependent: :destroy
+  has_many :likes_photos, through: :photo_likeables, source: :photo
+  has_many :albulm_likeables, dependent: :destroy
+  has_many :likes_albums, through: :albulm_likeables, source: :album
+
+  def liked?(tweet, tweet_type)
+    if tweet_type == 'photo'
+      likes_photos.include?(tweet)
+    elsif tweet_type == 'album'
+      likes_albums.include?(tweet)
+    end
+  end
+
+  def like(tweet, tweet_type)
+    if tweet_type == 'photo'
+      if likes_photos.include?(tweet)
+        likes_photos.destroy(tweet)
+      else
+        likes_photos << tweet
+      end
+    elsif tweet_type == 'album'
+      if likes_albums.include?(tweet)
+        likes_albums.destroy(tweet)
+      else
+        likes_albums << tweet
+      end
+    end
+  end
 
   # For users being followed
   has_many :followers_relationships, foreign_key: :followed_id, class_name: 'Follow', dependent: :destroy

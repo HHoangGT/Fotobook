@@ -33,9 +33,7 @@
           <!--          Photo footer-->
           <div class="d-flex justify-content-evenly align-items-center w-auto position-absolute"
                style="bottom: 10px; min-width: 200px">
-            <div class="d-inline-flex align-items-center">
-              <%= render partial: 'feeds/partials/likes', locals: { photo: photo } %>
-            </div>
+            <%= render partial: 'feeds/partials/likes', locals: { photo: photo, type: 'photo', like_status: like_status } %>
             <p class="card-text d-inline-flex ms-auto">
               <small class="text-body-secondary">
                 <%= photo.updated_at.in_time_zone("Asia/Ho_Chi_Minh").strftime("%I:%M %p %d/%m/%Y") %>

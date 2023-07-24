@@ -1,7 +1,7 @@
 class Album < ApplicationRecord
   belongs_to :user
-  has_many :liked_albums
-  has_many :like_user, through: :liked_albums, source: :user
+  has_many :albulm_likeables, dependent: :destroy
+  has_many :likes, through: :albulm_likeables, source: :user
   mount_uploaders :images, ImageUploader
 
   validates :title, presence: true, length: { maximum: 140 }

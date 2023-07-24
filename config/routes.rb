@@ -24,6 +24,9 @@ Rails.application.routes.draw do
   # follow route
   patch '/follow/unfollow/:follower_id/:followed_id', to: 'follows#unfollow', as: 'unfollow'
   patch '/follow/:follower_id/:followed_id', to: 'follows#follow', as: 'follow'
+  # like post route
+  post '/users/:user_id/photos/:photo_id', to: 'photos#like', as: 'like_photo'
+  post '/users/:user_id/album/:album_id', to: 'albums#like', as: 'like_album'
 
   root 'main#home'
 end

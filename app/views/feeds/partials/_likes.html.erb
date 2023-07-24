@@ -1,1 +1,26 @@
-<p class="mb-0"> Hello </p>
+<div id="<%= "#{dom_id(photo)} private_likes" %>" data-controller="photo" class="d-inline-flex align-items-center">
+
+  <% like_tweet = like_status ? "Unlike" : "Like" %>
+
+  <% if type == 'album' %>
+    <%= button_to like_album_path(user_id: current_user.id, album_id: photo.id), style: "border: none", class: "bg-light" do %>
+      <% if like_tweet == "Unlike" %>
+        <%= image_tag('heart_grey.svg', style: "height: 12px; width: 12.47px") %>
+      <% elsif like_tweet == "Like" %>
+        <%= image_tag('heart_white.svg', style: "height: 12px; width: 12.47px") %>
+      <% end %>
+    <% end %>
+  <% elsif type == 'photo' %>
+    <%= button_to like_photo_path(user_id: current_user.id, photo_id: photo.id), style: "border: none", class: "bg-light" do %>
+      <% if like_tweet == "Unlike" %>
+        <%= image_tag('heart_grey.svg', style: "height: 12px; width: 12.47px") %>
+      <% elsif like_tweet == "Like" %>
+        <%= image_tag('heart_white.svg', style: "height: 12px; width: 12.47px") %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <p class="mb-0" style="font-size: 10px; font-weight: 400;color: #3b5998;">
+    <%= render "feeds/partials/like_count", photo: photo %>
+  </p>
+</div>

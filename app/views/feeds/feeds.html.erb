@@ -3,7 +3,8 @@
   <% @users.each do |user| %>
     <% user.photos.each do |photo| %>
       <% if photo.mode == "Public" %>
-        <%= render partial: "feeds/partials/photo", locals: { photo: photo, user: user } %>
+        <%= render partial: "feeds/partials/photo",
+                   locals: { photo: photo, user: user, like_status: current_user.liked?(photo, 'photo') } %>
       <% end %>
     <% end %>
   <% end %>

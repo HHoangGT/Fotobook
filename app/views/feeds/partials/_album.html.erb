@@ -1,6 +1,6 @@
 <div class="col mb-3">
   <div class="card h-100 bg-light" style="max-width: 540px">
-    <div class="row g-0 pt-3 pb-5 bg-light photo-card-font">
+    <div class="row g-0 pt-3 pb-2 bg-light photo-card-font">
       <!--      Following user uploaded photo-->
       <div class="col-6 position-relative" data-bs-toggle="modal" data-bs-target="#<%= album.id %>" style="min-height: 250px">
         <%= image_tag(album.images[0].url, class: "img-fluid img-thumbnail rounded position-absolute bg-secondary",
@@ -37,9 +37,7 @@
           <!--          Photo footer-->
           <div class="d-flex justify-content-evenly align-items-center w-auto position-absolute"
                style="bottom: 10px; min-width: 200px">
-            <div class="d-inline-flex align-items-center">
-              <%= render partial: 'feeds/partials/likes', locals: { photo: album } %>
-            </div>
+            <%= render partial: 'feeds/partials/likes', locals: { photo: album, type: 'album', like_status: like_status } %>
             <p class="card-text d-inline-flex ms-auto">
               <small class="text-body-secondary">
                 <%= album.updated_at.in_time_zone("Asia/Ho_Chi_Minh").strftime("%I:%M %p %d/%m/%Y") %>

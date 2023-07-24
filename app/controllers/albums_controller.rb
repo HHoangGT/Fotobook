@@ -41,7 +41,25 @@ class AlbumsController < ApplicationController
     end
   end
 
+  def like
+    @album = Album.find(params[:album_id])
+    @user = User.find(params[:user_id])
+    @user.like(@album, 'album')
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: private_stream
+      end
+    end
+  end
+
   private
+
+  def private_stream
+    private_target = "#{helpers.dom_id(@album)} private_likes"
+    turbo_stream.replace(private_target, partial: 'feeds/partials/likes',
+                                         locals: { photo: @album, type: 'album',
+                                                   like_status: current_user.liked?(@album, 'album') })
+  end
 
   def album_params
     params.require(:album).permit(:title, :description, :mode, { images: [] })
