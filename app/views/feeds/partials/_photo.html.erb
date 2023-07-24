@@ -8,6 +8,20 @@
       <div class="col-md-6">
         <!--        Photo info-->
         <div class="card-body position-relative h-100">
+          <!--          follow button in discover-->
+          <% if request.env["REQUEST_PATH"].include?('discover') %>
+            <div class="d-flex justify-content-end">
+              <% if user.followers.ids.include?(current_user.id) %>
+                <%= button_to "following", unfollow_path(current_user, user), method: :patch,
+                              class: "btn btn-outline-info text-white fbtn add-photo-album-button d-flex align-items-center",
+                              style: " color: #3b5998; border-color: #3b5998; background-color: #3b5998; height: 20px" %>
+              <% else %>
+                <%= button_to "follow", follow_path(current_user, user), method: :patch,
+                              class: "btn btn-outline-info fbtn add-photo-album-button d-flex align-items-center",
+                              style: " color: #3b5998; border-color: #3b5998; height: 20px" %>
+              <% end %>
+            </div>
+          <% end %>
           <div class="align-items-center d-inline-flex mb-1">
             <%= link_to public_photo_path(user.id), style: "border: none", class: "bg-light d-flex align-items-center text-decoration-none" do %>
               <!--            following user avatar-->
