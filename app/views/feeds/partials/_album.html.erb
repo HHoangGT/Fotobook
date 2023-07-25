@@ -12,18 +12,20 @@
       <div class="col-6">
         <!--        Photo info-->
         <div class="card-body position-relative h-100">
-          <% if request.env["REQUEST_PATH"].include?('discover') %>
-            <div class="d-flex justify-content-end">
-              <% if user.followers.ids.include?(current_user.id) %>
-                <%= button_to "following", unfollow_path(current_user, user), method: :patch,
-                              class: "btn btn-outline-info text-white fbtn add-photo-album-button d-flex align-items-center",
-                              style: " color: #3b5998; border-color: #3b5998; background-color: #3b5998; height: 20px" %>
-              <% else %>
-                <%= button_to "follow", follow_path(current_user, user), method: :patch,
-                              class: "btn btn-outline-info fbtn add-photo-album-button d-flex align-items-center",
-                              style: " color: #3b5998; border-color: #3b5998; height: 20px" %>
-              <% end %>
-            </div>
+          <% if user_signed_in? %>
+            <% if request.env["REQUEST_PATH"].include?('discover') %>
+              <div class="d-flex justify-content-end">
+                <% if user.followers.ids.include?(current_user.id) %>
+                  <%= button_to "following", unfollow_path(current_user, user), method: :patch,
+                                class: "btn btn-outline-info text-white fbtn add-photo-album-button d-flex align-items-center",
+                                style: " color: #3b5998; border-color: #3b5998; background-color: #3b5998; height: 20px" %>
+                <% else %>
+                  <%= button_to "follow", follow_path(current_user, user), method: :patch,
+                                class: "btn btn-outline-info fbtn add-photo-album-button d-flex align-items-center",
+                                style: " color: #3b5998; border-color: #3b5998; height: 20px" %>
+                <% end %>
+              </div>
+            <% end %>
           <% end %>
           <div class="align-items-center d-inline-flex mb-1">
             <!--            following user avatar-->
@@ -52,7 +54,9 @@
           <!--          Photo footer-->
           <div class="d-flex justify-content-evenly align-items-center w-auto position-absolute"
                style="bottom: 10px; min-width: 200px">
-            <%= render partial: 'feeds/partials/likes', locals: { photo: album, type: 'album', like_status: like_status } %>
+            <% if user_signed_in? %>
+              <%= render partial: 'feeds/partials/likes', locals: { photo: album, type: 'album', like_status: like_status } %>
+            <% end %>
             <p class="card-text d-inline-flex ms-auto">
               <small class="text-body-secondary">
                 <%= album.updated_at.in_time_zone("Asia/Ho_Chi_Minh").strftime("%I:%M %p %d/%m/%Y") %>

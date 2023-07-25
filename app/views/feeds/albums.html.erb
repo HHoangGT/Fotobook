@@ -1,11 +1,24 @@
 <%= render partial: 'feeds/partials/buttons' %>
 <div class="row row-cols-1 row-cols-lg-2">
-  <% @users.each do |user| %>
-    <% user.albums.each do |album| %>
-      <% if album.mode == "Public" %>
+  <% @albums.each do |album| %>
+    <% if album.mode == "Public" %>
+      <% if user_signed_in? %>
+        <% if album.user != current_user %>
+          <%= render partial: "feeds/partials/album",
+                     locals: { album: album, user: album.user, like_status: current_user.liked?(album, "album") } %>
+        <% end %>
+      <% else %>
         <%= render partial: "feeds/partials/album",
-                   locals: { album: album, user: user, like_status: current_user.liked?(album, "album") } %>
+                   locals: { album: album, user: album.user, like_status: true } %>
       <% end %>
     <% end %>
   <% end %>
 </div>
+
+<section id="pagination">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center py-3">
+      <%= paginate @albums, remote: true, window: 1, outer_window: 2 %>
+    </ul>
+  </nav>
+</section>

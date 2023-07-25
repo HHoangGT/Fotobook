@@ -1,11 +1,13 @@
 class DiscoversController < ApplicationController
+  before_action :authenticate_user!, except: %i[album photo]
+
   def photo
-    @users = User.where.not(id: current_user.id)
+    @photos = Photo.all.page(params[:page]).per(4)
     render 'feeds/feeds'
   end
 
   def album
-    @users = User.where.not(id: current_user.id)
+    @albums = Album.all.page(params[:page]).per(4)
     render 'feeds/albums'
   end
 end

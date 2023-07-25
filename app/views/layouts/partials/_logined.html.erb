@@ -1,26 +1,32 @@
-<section id="newsFeed" class="bg-light">
-  <div class="row me-0 bg-light" style="height: 100%">
-    <div class="col-2 h-100 pt-5">
-      <div class="d-grid gap-2 col-6 mx-md-auto m-0 text-start">
-        <% if request.env["REQUEST_PATH"].include?("feeds") %>
-          <%= link_to "Feeds", feed_photos_path,
-                      class: "btn fbtn text-start p-0 text-decoration none", style: "color: #3b5998" %>
-        <% else %>
-          <%= link_to "Feeds", feed_photos_path,
-                      class: "btn fbtn text-start p-0 text-decoration none" %>
-        <% end %>
-        <% if request.env["REQUEST_PATH"].include?("discover") %>
-          <%= link_to "Discover", discover_photos_path,
-                      class: "btn fbtn text-start p-0 text-decoration none", style: "color: #3b5998" %>
-        <% else %>
-          <%= link_to "Discover", discover_photos_path,
-                      class: "btn fbtn text-start p-0 text-decoration none" %>
-        <% end %>
+<% if request.env["REQUEST_PATH"].include?('users') %>
+  <%= yield %>
+<% else %>
+  <section id="newsFeed" class="bg-light">
+    <div class="row me-0 bg-light" style="height: 100%">
+      <div class="col-2 h-100 pt-5">
+        <div class="d-grid gap-2 col-6 mx-md-auto m-0 text-start">
+          <% if user_signed_in? %>
+            <% if request.env["REQUEST_PATH"].include?("feeds") %>
+              <%= link_to "Feeds", feed_photos_path,
+                          class: "btn fbtn text-start p-0 text-decoration none", style: "color: #3b5998" %>
+            <% else %>
+              <%= link_to "Feeds", feed_photos_path,
+                          class: "btn fbtn text-start p-0 text-decoration none" %>
+            <% end %>
+            <% if request.env["REQUEST_PATH"].include?("discover") %>
+              <%= link_to "Discover", discover_photos_path,
+                          class: "btn fbtn text-start p-0 text-decoration none", style: "color: #3b5998" %>
+            <% else %>
+              <%= link_to "Discover", discover_photos_path,
+                          class: "btn fbtn text-start p-0 text-decoration none" %>
+            <% end %>
+          <% end %>
+        </div>
       </div>
+      <div class="col-8 bg-white pt-4 border border-light rounded-bottom overflow-auto" style="height: 90vh">
+        <%= yield %>
+      </div>
+      <div class="col-2 h-100 pt-5"></div>
     </div>
-    <div class="col-8 bg-white pt-4 border border-light rounded-bottom overflow-auto" style="height: 90vh">
-      <%= yield %>
-    </div>
-    <div class="col-2 h-100 pt-5"></div>
-  </div>
-</section>
+  </section>
+<% end %>

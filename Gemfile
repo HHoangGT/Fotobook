@@ -79,3 +79,5 @@ gem 'devise', '~> 4.9'
 gem 'rubocop', require: false
 
 gem 'carrierwave', '~> 3.0'
+
+gem 'kaminari'
