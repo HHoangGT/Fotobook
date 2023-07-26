@@ -12,8 +12,15 @@
     <div class="d-flex flex-column align-items-start justify-content-center">
       <% if user == current_user %>
         <!--      Edit profile link-->
-        <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-info fbtn mb-3 ms-2 add-photo-album-button",
-                    style: " color: #3b5998; border-color: #3b5998" %>
+        <div class="d-flex w-100 justify-content-between">
+          <%= link_to "Edit Profile", edit_user_registration_path, class: "btn btn-outline-info fbtn mb-3 ms-2 add-photo-album-button",
+                      style: " color: #3b5998; border-color: #3b5998" %>
+          <!--        Manager button-->
+          <% if current_user.role == "manager" %>
+            <%= link_to "Manager", manage_photo_path, class: "btn btn-outline-info fbtn mb-3 ms-2 add-photo-album-button",
+                        style: " color: #FF6666; border-color: #FF6666" %>
+          <% end %>
+        </div>
       <% else %>
         <!--        follow button public profile-->
         <% if user.followers.ids.include?(current_user.id) %>

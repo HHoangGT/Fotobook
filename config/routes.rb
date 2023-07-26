@@ -29,6 +29,10 @@ Rails.application.routes.draw do
   # like post route
   post '/users/:user_id/photos/:photo_id', to: 'photos#like', as: 'like_photo'
   post '/users/:user_id/album/:album_id', to: 'albums#like', as: 'like_album'
+  # manager routes
+  get 'manager/photos', to: 'managers#photo', as: 'manage_photo'
+  get 'manager/albums', to: 'managers#album', as: 'manage_album'
+  get 'manager/users', to: 'managers#user', as: 'manage_user'
 
   root 'main#home'
 end

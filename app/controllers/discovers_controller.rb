@@ -3,18 +3,18 @@ class DiscoversController < ApplicationController
 
   def photo
     @photos = if user_signed_in?
-                Photo.where.not(user_id: current_user.id).page(params[:page]).per(4)
+                Photo.where.not(user_id: current_user.id).where(mode: 'Public').page(params[:page]).per(4)
               else
-                Photo.all.page(params[:page]).per(4)
+                Photo.where(mode: 'Public').page(params[:page]).per(4)
               end
     render 'feeds/feeds'
   end
 
   def album
     @albums = if user_signed_in?
-                Album.where.not(user_id: current_user.id).page(params[:page]).per(4)
+                Album.where.not(user_id: current_user.id).where(mode: 'Public').page(params[:page]).per(4)
               else
-                Album.all.page(params[:page]).per(4)
+                Album.where(mode: 'Public').page(params[:page]).per(4)
               end
     render 'feeds/albums'
   end

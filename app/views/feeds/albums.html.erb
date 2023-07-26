@@ -1,14 +1,12 @@
 <%= render partial: 'feeds/partials/buttons' %>
 <div class="row row-cols-1 row-cols-lg-2">
   <% @albums.each do |album| %>
-    <% if album.mode == "Public" %>
-      <% if user_signed_in? %>
-        <%= render partial: "feeds/partials/album",
-                   locals: { album: album, user: album.user, like_status: current_user.liked?(album, "album") } %>
-      <% else %>
-        <%= render partial: "feeds/partials/album",
-                   locals: { album: album, user: album.user, like_status: true } %>
-      <% end %>
+    <% if user_signed_in? %>
+      <%= render partial: "feeds/partials/album",
+                 locals: { album: album, user: album.user, like_status: current_user.liked?(album, "album") } %>
+    <% else %>
+      <%= render partial: "feeds/partials/album",
+                 locals: { album: album, user: album.user, like_status: true } %>
     <% end %>
   <% end %>
 </div>

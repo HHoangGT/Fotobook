@@ -1,11 +1,12 @@
-<% if request.env["REQUEST_PATH"].include?('users') && request.env["REQUEST_PATH"].exclude?('edit') %>
+<% if request.env["REQUEST_PATH"].include?('users') && request.env["REQUEST_PATH"].exclude?('edit') &&
+  request.env["REQUEST_PATH"].exclude?('manager') %>
   <%= yield %>
 <% else %>
   <section id="newsFeed" class="bg-light">
     <div class="row me-0 bg-light" style="height: 100%">
       <div class="col-2 h-100 pt-5">
         <div class="d-grid gap-2 col-6 mx-md-auto m-0 text-start">
-          <% if user_signed_in? %>
+          <% if user_signed_in? && request.env["REQUEST_PATH"].exclude?("manager") %>
             <% if request.env["REQUEST_PATH"].include?("feeds") %>
               <%= link_to "Feeds", feed_photos_path,
                           class: "btn fbtn text-start p-0 text-decoration none", style: "color: #3b5998" %>
@@ -18,6 +19,28 @@
                           class: "btn fbtn text-start p-0 text-decoration none", style: "color: #3b5998" %>
             <% else %>
               <%= link_to "Discover", discover_photos_path,
+                          class: "btn fbtn text-start p-0 text-decoration none" %>
+            <% end %>
+          <% elsif request.env["REQUEST_PATH"].include?("manager") %>
+            <% if request.env["REQUEST_PATH"].include?("photos") %>
+              <%= link_to "Manage Photos", manage_photo_path,
+                          class: "btn fbtn text-start p-0 text-decoration none", style: "color: #3b5998" %>
+            <% else %>
+              <%= link_to "Manage Photos", manage_photo_path,
+                          class: "btn fbtn text-start p-0 text-decoration none" %>
+            <% end %>
+            <% if request.env["REQUEST_PATH"].include?("albums") %>
+              <%= link_to "Manage Albums", manage_album_path,
+                          class: "btn fbtn text-start p-0 text-decoration none", style: "color: #3b5998" %>
+            <% else %>
+              <%= link_to "Manage Albums", manage_album_path,
+                          class: "btn fbtn text-start p-0 text-decoration none" %>
+            <% end %>
+            <% if request.env["REQUEST_PATH"].include?("users") %>
+              <%= link_to "Manage Users", manage_user_path,
+                          class: "btn fbtn text-start p-0 text-decoration none", style: "color: #3b5998" %>
+            <% else %>
+              <%= link_to "Manage Users", manage_user_path,
                           class: "btn fbtn text-start p-0 text-decoration none" %>
             <% end %>
           <% end %>

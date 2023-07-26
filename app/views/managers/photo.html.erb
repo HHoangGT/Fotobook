@@ -1,0 +1,13 @@
+<div class="row">
+  <% @photos.each do |photo| %>
+    <%= render partial: 'managers/partials/photo', locals: { photo: photo } %>
+  <% end %>
+</div>
+
+<section id="pagination">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center py-3">
+      <%= paginate @photos, remote: true, window: 1, outer_window: 2 %>
+    </ul>
+  </nav>
+</section>

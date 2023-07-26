@@ -21,7 +21,11 @@
             />
         </svg>
         <% if user_signed_in? %>
-          <%= link_to "Fotobook", feed_photos_path, class: "navbar-brand link-light" %>
+          <% if current_user.role == "manager" %>
+            <%= link_to "Fotobook Admin", manage_photo_path, class: "navbar-brand link-light" %>
+          <% else %>
+            <%= link_to "Fotobook", feed_photos_path, class: "navbar-brand link-light" %>
+          <% end %>
         <% else %>
           <%= link_to "Fotobook", discover_photos_path, class: "navbar-brand link-light" %>
         <% end %>
