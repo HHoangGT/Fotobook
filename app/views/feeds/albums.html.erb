@@ -3,10 +3,8 @@
   <% @albums.each do |album| %>
     <% if album.mode == "Public" %>
       <% if user_signed_in? %>
-        <% if album.user != current_user %>
-          <%= render partial: "feeds/partials/album",
-                     locals: { album: album, user: album.user, like_status: current_user.liked?(album, "album") } %>
-        <% end %>
+        <%= render partial: "feeds/partials/album",
+                   locals: { album: album, user: album.user, like_status: current_user.liked?(album, "album") } %>
       <% else %>
         <%= render partial: "feeds/partials/album",
                    locals: { album: album, user: album.user, like_status: true } %>

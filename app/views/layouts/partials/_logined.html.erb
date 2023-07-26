@@ -1,4 +1,4 @@
-<% if request.env["REQUEST_PATH"].include?('users') %>
+<% if request.env["REQUEST_PATH"].include?('users') && request.env["REQUEST_PATH"].exclude?('edit') %>
   <%= yield %>
 <% else %>
   <section id="newsFeed" class="bg-light">
