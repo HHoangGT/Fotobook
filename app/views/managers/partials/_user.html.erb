@@ -1,0 +1,11 @@
+<tr>
+  <th scope="row"><%= index + 1 %></th>
+  <td><%= user[0] %></td>
+  <td><%= user[1] %></td>
+  <td><%= user[2] %></td>
+  <td><%= user[3].in_time_zone("Asia/Ho_Chi_Minh").strftime("%I:%M %p %d/%m/%Y") %></td>
+  <td class="d-flex gap-2 justify-content-center align-items-center">
+    <%= button_to("Edit", manage_edit_user_path(user[4]), method: :get, class: "btn btn-success") %>
+    <%= button_to("Delete", manage_delete_user_path(user[4]), method: :delete, class: "btn btn-danger") %>
+  </td>
+</tr>

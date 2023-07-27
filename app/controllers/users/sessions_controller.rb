@@ -9,9 +9,15 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   # POST /resource/sign_in
-  # def create
-  #   super
-  # end
+  def create
+    super do |resource|
+      unless resource.activate?
+        sign_out
+        flash[:alert] = 'Your account is inactive'
+        redirect_to new_user_session_path and return
+      end
+    end
+  end
 
   # DELETE /resource/sign_out
   # def destroy

@@ -24,7 +24,11 @@ class PhotosController < ApplicationController
     if params[:save].present?
       if @photo.update(photo_params)
         flash[:notice] = 'Uploaded successfully'
-        redirect_to profiles_photos_path
+        if current_user.role == 'manager'
+          redirect_to manage_photo_path
+        else
+          redirect_to profiles_photos_path
+        end
       else
         flash[:alert] = 'There has been an error when uploading photo'
         redirect_to edit_photo_path
@@ -32,7 +36,11 @@ class PhotosController < ApplicationController
     elsif params[:delete].present?
       if @photo.destroy
         flash[:notice] = 'Deleted successfully'
-        redirect_to profiles_photos_path
+        if current_user.role == 'manager'
+          redirect_to manage_photo_path
+        else
+          redirect_to profiles_photos_path
+        end
       else
         flash[:alert] = 'There has been an error when deleting photo'
         redirect_to edit_photo_path

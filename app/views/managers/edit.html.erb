@@ -1,0 +1,88 @@
+<nav class="navbar bg-white border-bottom border-secondary-subtle">
+  <div class="container">
+    <h2 class="navbar-brand" style="font-family: 'Roboto', sans-serif; font-weight: 700">
+      Edit User Profile
+    </h2>
+  </div>
+</nav>
+
+<div class="d-flex flex-column align-items-center justify-content-center container-fluid">
+  <div class="w-75">
+    <%= form_for(@user, url: manage_update_user_path(@user.id), html: { method: :put }) do |f| %>
+      <!--      user avatar-->
+      <div class="row g-3 w-100 mt-1">
+        <div class="col-0 col-md-3"></div>
+        <div class="col-12 col-md-9">
+          <div class="position-relative" style="width: 200px; height: 200px">
+            <% if @user.avatar.file.nil? %>
+              <%= image_tag("user-solid.svg", class: "img-thumbnail border-0 p-0", style: "width: 200px; height: 200px", id: "blah") %>
+            <% else %>
+              <%= image_tag(@user.avatar.url,
+                            class: "img-thumbnail border-0 p-0", style: "width: 200px; height: 200px", id: "blah") %>
+            <% end %>
+            <%= f.label :avatar, "CHANGE", class: "position-absolute btn btn-light w-50 opacity-50", style: "bottom: 10px; right: 50px" %>
+            <%= f.file_field :avatar, class: "d-none" %>
+          </div>
+        </div>
+      </div>
+
+      <!--      Text-->
+      <div class="row g-3 w-75 mt-1">
+        <div class="col-4 col-md-2 px-0"></div>
+        <div class="col-8 col-md-10">
+          <h5 class="font-family: 'Roboto', sans-serif; font-weight: 700" style="color: #3b5998">
+            Basic Information
+          </h5>
+        </div>
+      </div>
+
+      <!--      user info-->
+      <div class="field row g-3 w-75 mt-1">
+        <%= f.label :fname, "First Name", class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+        <br/>
+        <%= f.text_field :fname, autofocus: true, class: "col-8 col-md-10 mt-0 form-control w-75" %>
+      </div>
+
+      <div class="field row g-3 w-75 mt-1">
+        <%= f.label :lname, "Last Name", class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+        <br/>
+        <%= f.text_field :lname, class: "col-8 col-md-10 mt-0 form-control w-75" %>
+      </div>
+
+      <div class="field row g-3 w-75 mt-1">
+        <%= f.label :email, class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+        <br/>
+        <%= f.email_field :email, autocomplete: "email", class: "col-8 col-md-10 mt-0 form-control w-75" %>
+      </div>
+
+      <div class="field row g-3 w-75 mt-1">
+        <%= f.label :password, class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+        <br/>
+        <%= f.password_field :password, placeholder: "********", autocomplete: "new-password", class: "col-8 col-md-10 mt-0 form-control w-75" %>
+      </div>
+
+      <div class="field row g-3 w-75 mt-1">
+        <%= f.label :activate, "Activate?", class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
+        <br/>
+        <%= f.check_box :activate, class: "form-check-input" %>
+      </div>
+
+      <div class="actions row g-3 w-75 mt-1">
+        <div class="col-4 col-md-2 px-0"></div>
+        <div class="col-8 col-md-10">
+          <%= f.submit "Save", class: " btn btn-success" %>
+        </div>
+      </div>
+
+    <% end %>
+  </div>
+</div>
+
+<script>
+    user_avatar.onchange = evt => {
+        const [file] = user_avatar.files
+        if (file) {
+            blah.src = URL.createObjectURL(file)
+        }
+    }
+</script>

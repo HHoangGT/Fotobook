@@ -89,11 +89,6 @@
       </div>
 
       <div class="field row g-3 w-75 mt-1">
-        <!--      <i class="mt-0">(leave blank if you don't want to change it)</i><br/>-->
-        <%# if @minimum_password_length %>
-        <!--        <br/>-->
-        <!--        <em class="mt-0"><%#= @minimum_password_length %> characters minimum</em>-->
-        <%# end %>
         <%= f.label :password, class: "col-4 col-md-2 px-0 mt-0 form-label", style: "font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 13px;" %>
         <br/>
         <%= f.password_field :password, autocomplete: "new-password", class: "col-8 col-md-10 mt-0 form-control w-75" %>

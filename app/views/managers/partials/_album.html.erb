@@ -1,0 +1,13 @@
+<div class="col-12 col-md-6 col-lg-3">
+  <div class="position-relative" style="min-height: 250px">
+    <%= image_tag(album.images[0].url, class: "rounded img-fluid mb-2 img-thumbnail position-absolute", style: "transform: skewY(8deg)") %>
+    <%= image_tag(album.images[0].url, class: "rounded img-fluid mb-2 img-thumbnail position-absolute", style: "transform: skewY(4deg)") %>
+    <%= image_tag(album.images[0].url, class: "rounded img-fluid mb-2 img-thumbnail position-absolute") %>
+    <div class="position-absolute top-0 w-100 bg-dark opacity-75 d-flex align-items-center justify-content-between">
+      <p class="manager-photo-title mb-0 ms-1"><%= truncate(album.title, length: 20) %></p>
+      <%= link_to edit_album_path(album.id) do %>
+        <%= image_tag("edit2.png", class: "me-1", style: "height: 25px; width: 25px") %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,25 @@
-<h1> Hello Manager</h1>
+<table class="table">
+  <thead class="table-light">
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">First Name</th>
+    <th scope="col">Last Name</th>
+    <th scope="col">Email</th>
+    <th scope="col">Last Login</th>
+    <th scope="col"></th>
+  </tr>
+  </thead>
+  <tbody class="table-group-divider">
+  <% @users.each_with_index do |user, index| %>
+    <%= render partial: 'managers/partials/user', locals: { user: user, index: index } %>
+  <% end %>
+  </tbody>
+</table>
+
+<section id="pagination">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center py-3">
+      <%= paginate @users, remote: true, window: 1, outer_window: 2 %>
+    </ul>
+  </nav>
+</section>

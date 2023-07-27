@@ -24,7 +24,11 @@ class AlbumsController < ApplicationController
     if params[:save].present?
       if @album.update(album_params)
         flash[:notice] = 'Uploaded album successfully'
-        redirect_to profiles_albums_path
+        if current_user.role == 'manager'
+          redirect_to manage_album_path
+        else
+          redirect_to profiles_albums_path
+        end
       else
         flash[:alert] = 'There has been an error when uploading album'
         redirect_to edit_album_path
@@ -32,7 +36,11 @@ class AlbumsController < ApplicationController
     elsif params[:delete].present?
       if @album.destroy
         flash[:notice] = 'Delete album successfully'
-        redirect_to profiles_albums_path
+        if current_user.role == 'manager'
+          redirect_to manage_album_path
+        else
+          redirect_to profiles_albums_path
+        end
       else
         flash[:alert] = 'There has been an error when deleting album'
         redirect_to edit_album_path

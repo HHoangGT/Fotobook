@@ -1,1 +1,13 @@
-<h1> Hello Manager</h1>
+<div class="row">
+  <% @albums.each do |album| %>
+    <%= render partial: 'managers/partials/album', locals: { album: album } %>
+  <% end %>
+</div>
+
+<section id="pagination">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center py-3">
+      <%= paginate @albums, remote: true, window: 1, outer_window: 2 %>
+    </ul>
+  </nav>
+</section>

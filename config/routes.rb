@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: { registrations: 'users/registrations' }
+  devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions' }
 
   devise_scope :user do
     get '/users/sign_out' => 'devise/sessions#destroy'
@@ -33,6 +33,9 @@ Rails.application.routes.draw do
   get 'manager/photos', to: 'managers#photo', as: 'manage_photo'
   get 'manager/albums', to: 'managers#album', as: 'manage_album'
   get 'manager/users', to: 'managers#user', as: 'manage_user'
+  get 'manager/users/:user_id/edit', to: 'managers#edit', as: 'manage_edit_user'
+  put 'manager/users/:user_id', to: 'managers#update', as: 'manage_update_user'
+  delete 'manager/users/:user_id/delete', to: 'managers#delete', as: 'manage_delete_user'
 
   root 'main#home'
 end
