@@ -81,3 +81,7 @@ gem 'rubocop', require: false
 gem 'carrierwave', '~> 3.0'
 
 gem 'kaminari'
+
+gem 'fog-aws'
+
+gem 'dotenv-rails', groups: [:development, :test]
