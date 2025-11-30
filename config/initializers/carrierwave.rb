@@ -3,7 +3,7 @@ CarrierWave.configure do |config|
     provider: 'AWS', # required
     aws_access_key_id: ENV['PUBLIC'], # required unless using use_iam_profile
     aws_secret_access_key: ENV['PRIVATE'], # required unless using use_iam_profile
-    region: 'ap-southeast-1' # optional, defaults to 'us-east-1'
+    region: 'us-east-1' # optional, defaults to 'us-east-1'
   }
-  config.fog_directory = 'fotobookfinalapp' # required
+  config.fog_directory = 'de-demo-2025-1' # required
 end

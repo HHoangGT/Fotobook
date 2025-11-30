@@ -6,6 +6,7 @@ class AlbumsController < ApplicationController
   def create
     @album = current_user.albums.build album_params
     if @album.save
+      ActivityLogger.log_upload(current_user, @album, 'Album')
       flash[:notice] = 'Create Successfully'
       redirect_to profiles_albums_path
     else
@@ -54,6 +55,7 @@ class AlbumsController < ApplicationController
     @album = Album.find(params[:album_id])
     @user = User.find(params[:user_id])
     @user.like(@album, 'album')
+    ActivityLogger.log_like(@user, @album, 'Album')
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: private_stream

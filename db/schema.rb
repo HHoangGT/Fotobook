@@ -10,9 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_27_040845) do
+ActiveRecord::Schema[7.0].define(version: 2025_11_25_181133) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "activity_logs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "action", null: false
+    t.string "target_type"
+    t.bigint "target_id"
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action"], name: "index_activity_logs_on_action"
+    t.index ["created_at"], name: "index_activity_logs_on_created_at"
+    t.index ["target_type", "target_id"], name: "index_activity_logs_on_target_type_and_target_id"
+    t.index ["user_id", "action", "created_at"], name: "index_activity_logs_on_user_action_created"
+    t.index ["user_id"], name: "index_activity_logs_on_user_id"
+  end
 
   create_table "albulm_likeables", force: :cascade do |t|
     t.bigint "user_id", null: false

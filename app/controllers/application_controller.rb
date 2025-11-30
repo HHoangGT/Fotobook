@@ -8,4 +8,9 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_up, keys: %i[fname lname])
     devise_parameter_sanitizer.permit(:account_update, keys: %i[email fname lname password avatar])
   end
+  
+  private
+  def set_current_request
+    Current.request = request
+  end
 end

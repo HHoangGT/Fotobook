@@ -6,6 +6,7 @@ class PhotosController < ApplicationController
   def create
     @photo = current_user.photos.build photo_params
     if @photo.save
+      ActivityLogger.log_upload(current_user, @photo, 'Photo')
       flash[:notice] = 'Update Successfully'
       redirect_to profiles_photos_path
     else
@@ -50,10 +51,17 @@ class PhotosController < ApplicationController
     end
   end
 
+  def show
+    @photo = Photo.find(params[:id])
+    ActivityLogger.log_view(current_user, @photo, 'Photo')
+    # ... rest of show action
+  end
+
   def like
     @photo = Photo.find(params[:photo_id])
     @user = User.find(params[:user_id])
     @user.like(@photo, 'photo')
+    ActivityLogger.log_like(@user, @photo, 'Photo')
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: private_stream
