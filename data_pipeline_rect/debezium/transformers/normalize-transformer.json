@@ -1,0 +1,57 @@
+{
+    "description": "Normalization contract: Debezium CDC → Normalized Avro Event",
+    "input": {
+      "source": "Debezium CDC event from activity_logs table",
+      "format": "Debezium JSON with ExtractNewRecordState transform",
+      "fields": {
+        "id": "long (from after.id)",
+        "user_id": "long (from after.user_id)",
+        "action": "string (from after.action)",
+        "target_type": "string|null (from after.target_type)",
+        "target_id": "long|null (from after.target_id)",
+        "metadata": "jsonb (from after.metadata)",
+        "created_at": "timestamp (from after.created_at)",
+        "updated_at": "timestamp (from after.updated_at)",
+        "_op": "string (c=create, u=update, d=delete, r=read)",
+        "_ts_ms": "long (Debezium source timestamp)"
+      }
+    },
+    "output": {
+      "target": "Normalized UserActivity Avro event",
+      "topic": "user_activities",
+      "partition_key": "user_id (ensures ordering per user)",
+      "fields": {
+        "event_id": "string (UUID generated)",
+        "user_id": "long (from input.user_id) - PARTITION KEY",
+        "activity_type": "ActivityType enum (mapped from action)",
+        "target_type": "string|null (from input.target_type)",
+        "target_id": "long|null (from input.target_id)",
+        "metadata": "map<string,string> (from input.metadata jsonb)",
+        "timestamp": "long (timestamp-millis from created_at or _ts_ms)",
+        "source": "EventSource enum (DEBEZIUM_CDC)",
+        "_op": "string|null (from input._op)",
+        "_ts_ms": "long|null (from input._ts_ms)"
+      }
+    },
+    "mapping_rules": {
+      "activity_type_mapping": {
+        "VIEW": ["view", "show"],
+        "LIKE": ["like", "favorite"],
+        "COMMENT": ["comment"],
+        "SHARE": ["share"],
+        "FOLLOW": ["follow"],
+        "UNFOLLOW": ["unfollow"],
+        "UPLOAD": ["upload", "create"],
+        "DELETE": ["delete", "remove"],
+        "UPDATE": ["update", "edit"]
+      },
+      "partition_key": "user_id (hash(user_id) % num_partitions)",
+      "event_id_generation": "UUID v4",
+      "timestamp_priority": ["created_at", "_ts_ms", "current_timestamp"]
+    },
+    "error_handling": {
+      "invalid_mapping": "Send to recommendation_dlq topic",
+      "missing_required_field": "Send to recommendation_dlq topic",
+      "schema_validation_failure": "Send to recommendation_dlq topic"
+    }
+  }

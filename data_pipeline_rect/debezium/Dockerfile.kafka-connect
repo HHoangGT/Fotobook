@@ -1,0 +1,55 @@
+FROM debezium/connect:2.3
+
+# Install Confluent Avro Converter
+# Using Confluent Hub to ensure all dependencies are properly installed
+USER root
+
+# Debezium image is based on Fedora, curl should already be available
+# Check if curl exists, if not install using dnf
+RUN (command -v curl >/dev/null 2>&1 || (dnf install -y curl && dnf clean all)) && \
+    echo "✅ curl available"
+
+# Install Confluent Schema Registry Avro converter manually
+# Confluent packages are hosted on packages.confluent.io, not Maven Central
+# Using version 7.4.4 (compatible with Kafka 3.x)
+RUN mkdir -p /kafka/connect/confluent-avro-converter && \
+    cd /kafka/connect/confluent-avro-converter && \
+    echo "Downloading Confluent Avro Converter dependencies from Confluent repository..." && \
+    # Main converter (from Confluent repository)
+    curl -L -f -o kafka-connect-avro-converter-7.4.4.jar \
+      https://packages.confluent.io/maven/io/confluent/kafka-connect-avro-converter/7.4.4/kafka-connect-avro-converter-7.4.4.jar && \
+    # Avro Data (required for converter)
+    curl -L -f -o kafka-connect-avro-data-7.4.4.jar \
+      https://packages.confluent.io/maven/io/confluent/kafka-connect-avro-data/7.4.4/kafka-connect-avro-data-7.4.4.jar && \
+    # Schema Registry Client (from Confluent repository)
+    curl -L -f -o kafka-schema-registry-client-7.4.4.jar \
+      https://packages.confluent.io/maven/io/confluent/kafka-schema-registry-client/7.4.4/kafka-schema-registry-client-7.4.4.jar && \
+    # Schema Serializer (from Confluent repository)
+    curl -L -f -o kafka-schema-serializer-7.4.4.jar \
+      https://packages.confluent.io/maven/io/confluent/kafka-schema-serializer/7.4.4/kafka-schema-serializer-7.4.4.jar && \
+    # Schema Converter (required for AbstractDataConfig)
+    curl -L -f -o kafka-schema-converter-7.4.4.jar \
+      https://packages.confluent.io/maven/io/confluent/kafka-schema-converter/7.4.4/kafka-schema-converter-7.4.4.jar && \
+    # Avro Serializer (from Confluent repository)
+    curl -L -f -o kafka-avro-serializer-7.4.4.jar \
+      https://packages.confluent.io/maven/io/confluent/kafka-avro-serializer/7.4.4/kafka-avro-serializer-7.4.4.jar && \
+    # Common dependencies (from Confluent repository)
+    curl -L -f -o common-config-7.4.4.jar \
+      https://packages.confluent.io/maven/io/confluent/common-config/7.4.4/common-config-7.4.4.jar && \
+    curl -L -f -o common-utils-7.4.4.jar \
+      https://packages.confluent.io/maven/io/confluent/common-utils/7.4.4/common-utils-7.4.4.jar && \
+    # Apache Avro Core (from Maven Central)
+    curl -L -f -o avro-1.11.3.jar \
+      https://repo1.maven.org/maven2/org/apache/avro/avro/1.11.3/avro-1.11.3.jar && \
+    # Google Guava (from Maven Central)
+    curl -L -f -o guava-32.1.3-jre.jar \
+      https://repo1.maven.org/maven2/com/google/guava/guava/32.1.3-jre/guava-32.1.3-jre.jar && \
+    echo "✅ Avro converter JARs downloaded" && \
+    ls -lh && \
+    echo "Total: $(ls -1 *.jar 2>/dev/null | wc -l) JAR files"
+
+# Set permissions
+RUN chown -R kafka:kafka /kafka/connect/confluent-avro-converter 2>/dev/null || true && \
+    chown -R kafka:kafka /usr/share/confluent-hub-components 2>/dev/null || true
+
+USER kafka

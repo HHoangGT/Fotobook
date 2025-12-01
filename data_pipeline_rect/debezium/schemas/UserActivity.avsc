@@ -1,0 +1,76 @@
+{
+  "type": "record",
+  "name": "UserActivity",
+  "namespace": "com.fotobook.recommendation",
+  "doc": "Normalized user activity event for recommendation system",
+  "fields": [
+    {
+      "name": "event_id",
+      "type": "string",
+      "doc": "Unique event identifier (UUID)"
+    },
+    {
+      "name": "user_id",
+      "type": "long",
+      "doc": "User ID - used as partition key"
+    },
+    {
+      "name": "activity_type",
+      "type": {
+        "type": "enum",
+        "name": "ActivityType",
+        "symbols": ["VIEW", "LIKE", "COMMENT", "SHARE", "FOLLOW", "UNFOLLOW", "UPLOAD", "DELETE", "UPDATE"]
+      },
+      "doc": "Type of activity"
+    },
+    {
+      "name": "target_type",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "Target entity type (photo, album, user, etc.)"
+    },
+    {
+      "name": "target_id",
+      "type": ["null", "long"],
+      "default": null,
+      "doc": "Target entity ID"
+    },
+    {
+      "name": "metadata",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "default": {},
+      "doc": "Additional metadata as key-value pairs"
+    },
+    {
+      "name": "timestamp",
+      "type": "long",
+      "logicalType": "timestamp-millis",
+      "doc": "Event timestamp in milliseconds (UTC)"
+    },
+    {
+      "name": "source",
+      "type": {
+        "type": "enum",
+        "name": "EventSource",
+        "symbols": ["DEBEZIUM_CDC", "API", "BATCH", "STREAMING"]
+      },
+      "default": "DEBEZIUM_CDC",
+      "doc": "Source of the event"
+    },
+    {
+      "name": "_op",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "Debezium operation type (c, u, d, r)"
+    },
+    {
+      "name": "_ts_ms",
+      "type": ["null", "long"],
+      "default": null,
+      "doc": "Debezium source timestamp in milliseconds"
+    }
+  ]
+}

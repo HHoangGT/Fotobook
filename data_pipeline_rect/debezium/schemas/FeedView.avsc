@@ -1,0 +1,83 @@
+{
+  "type": "record",
+  "name": "FeedView",
+  "namespace": "com.fotobook.recommendation",
+  "doc": "Feed view event for recommendation system",
+  "fields": [
+    {
+      "name": "event_id",
+      "type": "string",
+      "doc": "Unique event identifier (UUID)"
+    },
+    {
+      "name": "user_id",
+      "type": "long",
+      "doc": "User ID viewing the feed - partition key"
+    },
+    {
+      "name": "feed_type",
+      "type": {
+        "type": "enum",
+        "name": "FeedType",
+        "symbols": ["HOME", "DISCOVER", "PROFILE", "ALBUM", "SEARCH"]
+      },
+      "doc": "Type of feed being viewed"
+    },
+    {
+      "name": "viewed_items",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "ViewedItem",
+          "fields": [
+            {
+              "name": "item_type",
+              "type": "string",
+              "doc": "Type: photo or album"
+            },
+            {
+              "name": "item_id",
+              "type": "long",
+              "doc": "Item ID"
+            },
+            {
+              "name": "position",
+              "type": "int",
+              "doc": "Position in feed"
+            },
+            {
+              "name": "view_duration_ms",
+              "type": ["null", "long"],
+              "default": null,
+              "doc": "View duration in milliseconds"
+            }
+          ]
+        }
+      },
+      "default": [],
+      "doc": "List of items viewed in this feed session"
+    },
+    {
+      "name": "session_id",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "Session identifier"
+    },
+    {
+      "name": "metadata",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "default": {},
+      "doc": "Additional metadata"
+    },
+    {
+      "name": "timestamp",
+      "type": "long",
+      "logicalType": "timestamp-millis",
+      "doc": "Event timestamp in milliseconds (UTC)"
+    }
+  ]
+}

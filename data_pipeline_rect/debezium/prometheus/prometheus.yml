@@ -1,0 +1,27 @@
+# debezium/prometheus/prometheus.yml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Kafka Connect metrics
+  - job_name: 'kafka-connect'
+    static_configs:
+      - targets: ['kafka-connect:8083']
+    metrics_path: '/metrics'
+    
+  # Kafka metrics (if JMX exporter is enabled)
+  - job_name: 'kafka'
+    static_configs:
+      - targets: ['kafka-1:9092', 'kafka-2:9092', 'kafka-3:9092']
+    
+  # Schema Registry metrics
+  - job_name: 'schema-registry'
+    static_configs:
+      - targets: ['schema-registry:8081']
+    metrics_path: '/metrics'
+    
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

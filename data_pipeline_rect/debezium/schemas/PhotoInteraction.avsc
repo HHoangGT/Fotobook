@@ -1,0 +1,77 @@
+{
+  "type": "record",
+  "name": "PhotoInteraction",
+  "namespace": "com.fotobook.recommendation",
+  "doc": "Photo interaction event (likes, views, comments)",
+  "fields": [
+    {
+      "name": "event_id",
+      "type": "string",
+      "doc": "Unique event identifier (UUID)"
+    },
+    {
+      "name": "user_id",
+      "type": "long",
+      "doc": "User ID - partition key"
+    },
+    {
+      "name": "photo_id",
+      "type": "long",
+      "doc": "Photo ID"
+    },
+    {
+      "name": "interaction_type",
+      "type": {
+        "type": "enum",
+        "name": "InteractionType",
+        "symbols": ["LIKE", "UNLIKE", "VIEW", "COMMENT", "SHARE"]
+      },
+      "doc": "Type of interaction"
+    },
+    {
+      "name": "photo_owner_id",
+      "type": ["null", "long"],
+      "default": null,
+      "doc": "Photo owner user ID"
+    },
+    {
+      "name": "photo_title",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "Photo title"
+    },
+    {
+      "name": "photo_mode",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "Photo privacy mode"
+    },
+    {
+      "name": "metadata",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "default": {},
+      "doc": "Additional metadata"
+    },
+    {
+      "name": "timestamp",
+      "type": "long",
+      "logicalType": "timestamp-millis",
+      "doc": "Event timestamp in milliseconds (UTC)"
+    },
+    {
+      "name": "_op",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "Debezium operation type"
+    },
+    {
+      "name": "_ts_ms",
+      "type": ["null", "long"],
+      "default": null,
+      "doc": "Debezium source timestamp"
+    }
+  ]
+}

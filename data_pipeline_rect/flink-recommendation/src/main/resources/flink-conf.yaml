@@ -1,0 +1,112 @@
+################################################################################
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+
+################################################################################
+#  JobManager Options
+################################################################################
+
+jobmanager.rpc.address: localhost
+jobmanager.rpc.port: 6123
+jobmanager.bind-host: 0.0.0.0
+jobmanager.memory.process.size: 1600m
+
+################################################################################
+#  TaskManager Options
+################################################################################
+
+taskmanager.numberOfTaskSlots: 4
+taskmanager.memory.process.size: 1728m
+taskmanager.memory.flink.size: 1280m
+taskmanager.memory.managed.fraction: 0.4
+taskmanager.bind-host: 0.0.0.0
+
+################################################################################
+#  Checkpointing Options
+################################################################################
+
+# Checkpoint interval
+execution.checkpointing.interval: 60000
+execution.checkpointing.mode: EXACTLY_ONCE
+execution.checkpointing.timeout: 600000
+execution.checkpointing.max-concurrent-checkpoints: 1
+execution.checkpointing.min-pause: 500
+
+# Externalized checkpoint cleanup
+execution.checkpointing.externalized-checkpoint-retention: RETAIN_ON_CANCELLATION
+
+# Checkpoint storage
+state.backend: hashmap
+state.checkpoints.dir: file:///tmp/flink-checkpoints
+state.savepoints.dir: file:///tmp/flink-savepoints
+
+# RocksDB State Backend (if using)
+# state.backend: rocksdb
+# state.backend.incremental: true
+# state.backend.rocksdb.localdir: /tmp/flink-rocksdb
+
+################################################################################
+#  High Availability Options
+################################################################################
+
+# high-availability: zookeeper
+# high-availability.zookeeper.quorum: zookeeper:2181
+# high-availability.cluster-id: /flink
+# high-availability.storageDir: file:///tmp/flink/ha
+
+################################################################################
+#  Watermarks
+################################################################################
+
+pipeline.auto-watermark-interval: 200
+
+################################################################################
+#  Restart Strategy
+################################################################################
+
+restart-strategy: fixed-delay
+restart-strategy.fixed-delay.attempts: 3
+restart-strategy.fixed-delay.delay: 10s
+
+################################################################################
+#  Network Options
+################################################################################
+
+taskmanager.network.memory.fraction: 0.2
+taskmanager.network.memory.min: 512mb
+taskmanager.network.memory.max: 1gb
+
+################################################################################
+#  Metrics
+################################################################################
+
+metrics.reporter.prometheus.factory.class: org.apache.flink.metrics.prometheus.PrometheusReporterFactory
+metrics.reporter.prometheus.port: 9249
+metrics.reporter.prometheus.host: 0.0.0.0
+
+################################################################################
+#  Logging
+################################################################################
+
+env.java.opts: -Dlog4j.configuration=file:/opt/flink/conf/log4j.properties
+
+################################################################################
+#  State Backend
+################################################################################
+
+# Enable incremental checkpoints for RocksDB
+# state.backend.rocksdb.checkpoint.transfer.thread.num: 4

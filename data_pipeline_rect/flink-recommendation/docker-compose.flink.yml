@@ -1,0 +1,100 @@
+# Xóa dòng version: '3.8'
+
+services:
+  # Flink JobManager
+  flink-jobmanager:
+    image: flink:1.17.1-scala_2.12
+    container_name: flink-jobmanager
+    ports:
+      - "8082:8081"
+    command: jobmanager
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        jobmanager.memory.process.size: 1600m
+        taskmanager.numberOfTaskSlots: 4
+        taskmanager.memory.process.size: 1728m
+        parallelism.default: 2
+        state.backend: hashmap
+        state.checkpoints.dir: file:///tmp/flink-checkpoints
+        execution.checkpointing.interval: 60000
+        execution.checkpointing.mode: EXACTLY_ONCE
+        metrics.reporter.prometheus.factory.class: org.apache.flink.metrics.prometheus.PrometheusReporterFactory
+        metrics.reporter.prometheus.port: 9249
+    volumes:
+      - ./target:/opt/flink/usrlib
+      - flink-checkpoints:/tmp/flink-checkpoints
+    networks:
+      - photobook_kafka-network
+    # Xóa depends_on: zookeeper - không cần thiết
+
+  # Flink TaskManager 1
+  flink-taskmanager-1:
+    image: flink:1.17.1-scala_2.12
+    container_name: flink-taskmanager-1
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    # Xóa scale: 1 - không phải cách đúng để scale
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 4
+        taskmanager.memory.process.size: 1728m
+        metrics.reporter.prometheus.factory.class: org.apache.flink.metrics.prometheus.PrometheusReporterFactory
+        metrics.reporter.prometheus.port: 9249
+    volumes:
+      - ./target:/opt/flink/usrlib
+      - flink-checkpoints:/tmp/flink-checkpoints
+    networks:
+      - photobook_kafka-network
+
+  # Flink TaskManager 2
+  flink-taskmanager-2:
+    image: flink:1.17.1-scala_2.12
+    container_name: flink-taskmanager-2
+    depends_on:
+      - flink-jobmanager
+    command: taskmanager
+    # Xóa scale: 1
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: flink-jobmanager
+        taskmanager.numberOfTaskSlots: 4
+        taskmanager.memory.process.size: 1728m
+        metrics.reporter.prometheus.factory.class: org.apache.flink.metrics.prometheus.PrometheusReporterFactory
+        metrics.reporter.prometheus.port: 9249
+    volumes:
+      - ./target:/opt/flink/usrlib
+      - flink-checkpoints:/tmp/flink-checkpoints
+    networks:
+      - photobook_kafka-network
+
+  # Redis for feature storage
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - photobook_kafka-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  photobook_kafka-network:
+    external: true
+    name: photobook_kafka-network
+
+volumes:
+  flink-checkpoints:
+  redis-data:

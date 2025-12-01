@@ -1,0 +1,48 @@
+{
+    "name": "fotobook-activity-logs-normalized-connector",
+    "config": {
+      "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+      "tasks.max": "1",
+      "database.hostname": "postgres",
+      "database.port": "5432",
+      "database.user": "replication_user",
+      "database.password": "replication_password",
+      "database.dbname": "fotobook_development",
+      "database.server.name": "fotobook",
+      "table.include.list": "public.activity_logs",
+      "topic.prefix": "fotobook",
+      "schema.history.internal.kafka.bootstrap.servers": "kafka-1:29092,kafka-2:29092,kafka-3:29092",
+      "schema.history.internal.kafka.topic": "fotobook.schema-changes.activity_logs",
+      
+      "transforms": "unwrap,normalize,route",
+      "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+      "transforms.unwrap.drop.tombstones": "false",
+      "transforms.unwrap.delete.handling.mode": "rewrite",
+      "transforms.unwrap.add.fields": "op,source.ts_ms",
+      
+      "transforms.normalize.type": "org.apache.kafka.connect.transforms.InsertField$Value",
+      "transforms.normalize.static.field": "source",
+      "transforms.normalize.static.value": "DEBEZIUM_CDC",
+      
+      "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+      "transforms.route.regex": "fotobook.public.activity_logs",
+      "transforms.route.replacement": "user_activities",
+      
+      "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+      "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+      "value.converter.schemas.enable": "false",
+      
+      "key.converter.schemas.enable": "false",
+      
+      "snapshot.mode": "initial",
+      "snapshot.locking.mode": "minimal",
+      "slot.name": "debezium_activity_logs_normalized",
+      "publication.name": "debezium_publication",
+      "plugin.name": "pgoutput",
+      "topic.retention.ms": "604800000",
+      "topic.retention.bytes": "-1",
+      "max.batch.size": "2048",
+      "max.queue.size": "8192",
+      "poll.interval.ms": "1000"
+    }
+  }

@@ -1,0 +1,72 @@
+{
+  "type": "record",
+  "name": "UserProfileUpdate",
+  "namespace": "com.fotobook.recommendation",
+  "doc": "User profile update event",
+  "fields": [
+    {
+      "name": "event_id",
+      "type": "string",
+      "doc": "Unique event identifier (UUID)"
+    },
+    {
+      "name": "user_id",
+      "type": "long",
+      "doc": "User ID - partition key"
+    },
+    {
+      "name": "update_type",
+      "type": {
+        "type": "enum",
+        "name": "UpdateType",
+        "symbols": ["PROFILE_UPDATE", "AVATAR_CHANGE", "PREFERENCES_CHANGE", "ACTIVATION_CHANGE"]
+      },
+      "doc": "Type of profile update"
+    },
+    {
+      "name": "updated_fields",
+      "type": {
+        "type": "array",
+        "items": "string"
+      },
+      "default": [],
+      "doc": "List of field names that were updated"
+    },
+    {
+      "name": "old_values",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "default": {},
+      "doc": "Old values of updated fields"
+    },
+    {
+      "name": "new_values",
+      "type": {
+        "type": "map",
+        "values": "string"
+      },
+      "default": {},
+      "doc": "New values of updated fields"
+    },
+    {
+      "name": "timestamp",
+      "type": "long",
+      "logicalType": "timestamp-millis",
+      "doc": "Event timestamp in milliseconds (UTC)"
+    },
+    {
+      "name": "_op",
+      "type": ["null", "string"],
+      "default": null,
+      "doc": "Debezium operation type"
+    },
+    {
+      "name": "_ts_ms",
+      "type": ["null", "long"],
+      "default": null,
+      "doc": "Debezium source timestamp"
+    }
+  ]
+}

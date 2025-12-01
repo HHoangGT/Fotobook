@@ -1,0 +1,329 @@
+# docker-compose.yml
+services:
+  postgres:
+      image: postgres:15-alpine
+      hostname: postgres
+      container_name: fotobook-postgres
+      ports:
+        - "0.0.0.0:5432:5432"
+      environment:
+        POSTGRES_USER: fotobook
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: fotobook_development
+      volumes:
+        - postgres-data:/var/lib/postgresql/data
+        - ./debezium/postgres/init-replication.sql:/docker-entrypoint-initdb.d/init-replication.sql
+      networks:
+        - kafka-network
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U fotobook -d fotobook_development"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+        start_period: 40s
+      command: >
+        postgres
+        -c wal_level=logical
+        -c max_replication_slots=10
+        -c max_wal_senders=10
+        -c max_connections=200
+        -c listen_addresses='*'
+  # Zookeeper - Required for Kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - kafka-network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Kafka Brokers (3 brokers for high availability)
+  kafka-1:
+    image: confluentinc/cp-kafka:7.5.0
+    hostname: kafka-1
+    container_name: kafka-1
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9092:9092"
+      - "19092:19092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_MESSAGE_MAX_BYTES: 209715200
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 209715200
+      KAFKA_FETCH_MESSAGE_MAX_BYTES: 209715200
+      KAFKA_MAX_REQUEST_SIZE: 209715200
+      KAFKA_SOCKET_REQUEST_MAX_BYTES: 209715200
+      KAFKA_SOCKET_RECEIVE_BUFFER_BYTES: 104857600
+      KAFKA_SOCKET_SEND_BUFFER_BYTES: 104857600
+      KAFKA_RECEIVE_BUFFER_CONFIG: 104857600
+      KAFKA_SEND_BUFFER_CONFIG: 104857600
+    networks:
+      - kafka-network
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  kafka-2:
+    image: confluentinc/cp-kafka:7.5.0
+    hostname: kafka-2
+    container_name: kafka-2
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9093:9092"
+      - "19093:19092"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:29092,PLAINTEXT_HOST://localhost:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_MESSAGE_MAX_BYTES: 209715200
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 209715200
+      KAFKA_FETCH_MESSAGE_MAX_BYTES: 209715200
+      KAFKA_MAX_REQUEST_SIZE: 209715200
+      KAFKA_SOCKET_REQUEST_MAX_BYTES: 209715200
+      KAFKA_SOCKET_RECEIVE_BUFFER_BYTES: 104857600
+      KAFKA_SOCKET_SEND_BUFFER_BYTES: 104857600
+      KAFKA_RECEIVE_BUFFER_CONFIG: 104857600
+      KAFKA_SEND_BUFFER_CONFIG: 104857600
+    networks:
+      - kafka-network
+
+  kafka-3:
+    image: confluentinc/cp-kafka:7.5.0
+    hostname: kafka-3
+    container_name: kafka-3
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9094:9092"
+      - "19094:19092"
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:29092,PLAINTEXT_HOST://localhost:9094
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_MESSAGE_MAX_BYTES: 209715200
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 209715200
+      KAFKA_FETCH_MESSAGE_MAX_BYTES: 209715200
+      KAFKA_MAX_REQUEST_SIZE: 209715200
+      KAFKA_SOCKET_REQUEST_MAX_BYTES: 209715200
+      KAFKA_SOCKET_RECEIVE_BUFFER_BYTES: 104857600
+      KAFKA_SOCKET_SEND_BUFFER_BYTES: 104857600
+      KAFKA_RECEIVE_BUFFER_CONFIG: 104857600
+      KAFKA_SEND_BUFFER_CONFIG: 104857600
+    networks:
+      - kafka-network
+
+  # Schema Registry - For schema evolution
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.5.0
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka-1:29092,kafka-2:29092,kafka-3:29092'
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    networks:
+      - kafka-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/subjects"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Kafka Connect with Debezium
+  kafka-connect:
+    build:
+        context: ./debezium
+        dockerfile: Dockerfile.kafka-connect
+    # image: debezium/connect:2.3
+    hostname: kafka-connect
+    container_name: kafka-connect
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+      - schema-registry
+      - postgres
+    ports:
+      - "8083:8083"
+    environment:
+      # Debezium image uses different variable names
+      BOOTSTRAP_SERVERS: kafka-1:29092,kafka-2:29092,kafka-3:29092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: docker-connect-configs
+      OFFSET_STORAGE_TOPIC: docker-connect-offsets
+      STATUS_STORAGE_TOPIC: docker-connect-status
+      CONFIG_STORAGE_REPLICATION_FACTOR: 3
+      OFFSET_STORAGE_REPLICATION_FACTOR: 3
+      STATUS_STORAGE_REPLICATION_FACTOR: 3
+      # Converters (default to JSON, can be overridden per connector)
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
+      CONNECT_PLUGIN_PATH: /kafka/connect
+      # Schema Registry (for Avro converter)
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+    networks:
+      - kafka-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/connectors"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Debezium UI - Web interface for managing connectors
+  debezium-ui:
+    image: debezium/debezium-ui:latest
+    hostname: debezium-ui
+    container_name: debezium-ui
+    depends_on:
+      - kafka-connect
+      - schema-registry
+    ports:
+      - "8080:8080"
+    environment:
+      # Kafka Connect configuration
+      KAFKA_CONNECT_URIS: http://kafka-connect:8083
+      # Schema Registry configuration (optional but recommended)
+      KAFKA_SCHEMA_REGISTRY_URIS: http://schema-registry:8081
+      # Backend configuration
+      BACKEND_URL: http://localhost:8080
+      # Enable CORS for local development
+      ENABLE_CORS: "true"
+    networks:
+      - kafka-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # Kafka UI - Web interface for managing Kafka topics, messages, and consumer groups
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    hostname: kafka-ui
+    container_name: kafka-ui
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+      - schema-registry
+    ports:
+      - "8090:8080"
+    environment:
+      # Kafka clusters configuration
+      KAFKA_CLUSTERS_0_NAME: fotobook-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:29092,kafka-2:29092,kafka-3:29092
+      # Schema Registry configuration
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+      # Kafka Connect configuration (optional)
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: kafka-connect
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafka-connect:8083
+      # Enable metrics
+      KAFKA_CLUSTERS_0_METRICS_PORT: 9999
+      # UI configuration
+      AUTH_TYPE: "disabled"
+      LOGGING_LEVEL_COM_PROVECTUS: INFO
+    networks:
+      - kafka-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Prometheus for monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./debezium/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - kafka-network
+
+  # Grafana for dashboards
+  grafana:
+    image: grafana/grafana:latest
+    hostname: grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./debezium/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./debezium/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - kafka-network
+    depends_on:
+      - prometheus
+
+networks:
+  kafka-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  prometheus-data:
+  grafana-data:
